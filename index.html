@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Code Assistant - Secure GitHub Version</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: #0f0f23;
+            color: #ffffff;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1a1a2e;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #16213e;
+            border-radius: 4px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #0f3460;
+        }
+        
+        .tab-active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 4px 15px 0 rgba(102, 126, 234, 0.4);
+        }
+        
+        .tab-inactive {
+            background: #1a1a2e;
+            border: 1px solid #16213e;
+        }
+        
+        .tab-inactive:hover {
+            background: #16213e;
+            border-color: #0f3460;
+        }
+        
+        .project-item {
+            background: #1a1a2e;
+            border: 1px solid #16213e;
+            transition: all 0.3s ease;
+        }
+        
+        .project-item:hover {
+            background: #16213e;
+            border-color: #0f3460;
+            transform: translateY(-1px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 4px 15px 0 rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px 0 rgba(102, 126, 234, 0.6);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #1a1a2e;
+            border: 1px solid #16213e;
+        }
+        
+        .btn-secondary:hover {
+            background: #16213e;
+            border-color: #0f3460;
+        }
+        
+        .btn-danger {
+            background: #dc2626;
+            border: 1px solid #b91c1c;
+        }
+        
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+        
+        .input-field {
+            background: #1a1a2e;
+            border: 1px solid #16213e;
+            color: #ffffff;
+        }
+        
+        .input-field:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .editor-container {
+            height: 500px;
+            border: 1px solid #16213e;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .preview-frame {
+            background: white;
+            border: 1px solid #16213e;
+            border-radius: 8px;
+        }
+        
+        .thinking-area {
+            background: #1a1a2e;
+            border: 1px solid #16213e;
+            border-radius: 8px;
+            padding: 20px;
+            height: 500px;
+            overflow-y: auto;
+        }
+        
+        .sidebar {
+            background: #16213e;
+            border-right: 1px solid #0f3460;
+        }
+        
+        .main-content {
+            background: #0f0f23;
+        }
+        
+        .loading-spinner {
+            border: 2px solid #1a1a2e;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .security-warning {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #92400e;
+        }
+        
+        .security-info {
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            color: #1e40af;
+        }
+        
+        .api-key-status {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .api-key-valid {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #22c55e;
+        }
+        
+        .api-key-invalid {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #ef4444;
+        }
+        
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="sidebar w-80 p-6 overflow-y-auto custom-scrollbar">
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold mb-2 text-white">
+                    <i class="fas fa-code mr-2 text-purple-400"></i>
+                    AI Code Assistant
+                </h1>
+                <p class="text-gray-400 text-sm">Secure GitHub Version</p>
+            </div>
+            
+            <!-- API Key Status -->
+            <div class="mb-6">
+                <div class="flex items-center justify-between mb-3">
+                    <label class="text-sm font-medium text-gray-300">API Status</label>
+                    <button id="settingsBtn" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+                <div id="apiKeyStatus" class="api-key-status api-key-invalid">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    API Key Required
+                </div>
+            </div>
+            
+            <!-- AI Model Selection -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-300 mb-2">AI Model</label>
+                <select id="aiModel" class="input-field w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <option value="gpt4">GPT-4</option>
+                    <option value="claude">Claude (Coming Soon)</option>
+                </select>
+            </div>
+            
+            <!-- New Project Button -->
+            <button id="newProjectBtn" class="btn-primary w-full px-4 py-3 rounded-lg text-white font-medium transition-all duration-300 mb-6">
+                <i class="fas fa-plus mr-2"></i>
+                New Project
+            </button>
+            
+            <!-- Saved Projects -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold text-white mb-4">
+                    <i class="fas fa-folder mr-2 text-blue-400"></i>
+                    Saved Projects
+                </h2>
+                <div id="projectsList" class="space-y-2">
+                    <!-- Projects will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Project Actions -->
+            <div class="space-y-2">
+                <button id="saveProjectBtn" class="btn-secondary w-full px-4 py-2 rounded-lg text-white font-medium transition-all duration-300">
+                    <i class="fas fa-save mr-2"></i>
+                    Save Current Project
+                </button>
+                <button id="exportProjectBtn" class="btn-secondary w-full px-4 py-2 rounded-lg text-white font-medium transition-all duration-300">
+                    <i class="fas fa-download mr-2"></i>
+                    Export Project
+                </button>
+            </div>
+            
+            <!-- Security Notice -->
+            <div class="mt-6 p-4 bg-yellow-900 bg-opacity-30 border border-yellow-600 rounded-lg">
+                <div class="flex items-start">
+                    <i class="fas fa-shield-alt text-yellow-400 mr-2 mt-1"></i>
+                    <div>
+                        <h3 class="text-yellow-300 font-medium text-sm">Security Notice</h3>
+                        <p class="text-yellow-200 text-xs mt-1">API keys are stored locally in your browser. Never share your keys publicly.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content flex-1 flex flex-col">
+            <!-- Top Section - Tabs and Content -->
+            <div class="flex-1 p-6">
+                <!-- Tab Navigation -->
+                <div class="flex space-x-2 mb-6">
+                    <button id="thinkingTab" class="tab-active px-6 py-3 rounded-lg font-medium transition-all duration-300">
+                        <i class="fas fa-brain mr-2"></i>
+                        Thinking
+                    </button>
+                    <button id="codeTab" class="tab-inactive px-6 py-3 rounded-lg font-medium transition-all duration-300">
+                        <i class="fas fa-code mr-2"></i>
+                        Code
+                    </button>
+                    <button id="previewTab" class="tab-inactive px-6 py-3 rounded-lg font-medium transition-all duration-300">
+                        <i class="fas fa-eye mr-2"></i>
+                        Live Preview
+                    </button>
+                </div>
+                
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- Thinking Tab -->
+                    <div id="thinkingContent" class="tab-pane active">
+                        <div class="thinking-area custom-scrollbar">
+                            <div id="thinkingText" class="text-gray-300 leading-relaxed">
+                                <div class="text-center text-gray-500 mt-20">
+                                    <i class="fas fa-lightbulb text-4xl mb-4"></i>
+                                    <p>AI thoughts and explanations will appear here...</p>
+                                    <p class="text-sm mt-2">Click the settings icon to add your API key first</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Code Tab -->
+                    <div id="codeContent" class="tab-pane hidden">
+                        <div class="mb-4 flex space-x-2">
+                            <button id="htmlBtn" class="btn-primary px-4 py-2 rounded-lg text-white font-medium transition-all duration-300">
+                                HTML
+                            </button>
+                            <button id="cssBtn" class="btn-secondary px-4 py-2 rounded-lg text-white font-medium transition-all duration-300">
+                                CSS
+                            </button>
+                            <button id="jsBtn" class="btn-secondary px-4 py-2 rounded-lg text-white font-medium transition-all duration-300">
+                                JavaScript
+                            </button>
+                        </div>
+                        <div class="editor-container">
+                            <div id="editor"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Preview Tab -->
+                    <div id="previewContent" class="tab-pane hidden">
+                        <div class="h-full">
+                            <iframe id="previewFrame" class="preview-frame w-full h-full" src="about:blank"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Section - Prompt Input -->
+            <div class="p-6 border-t border-gray-700">
+                <div class="flex space-x-4">
+                    <div class="flex-1">
+                        <textarea 
+                            id="promptInput" 
+                            class="input-field w-full px-4 py-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-purple-500" 
+                            rows="3" 
+                            placeholder="Describe what you want to build, add, fix, or change... (e.g., 'Add a login form with email and password fields')"
+                        ></textarea>
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                        <button id="generateBtn" class="btn-primary px-6 py-3 rounded-lg text-white font-medium transition-all duration-300 flex items-center">
+                            <i class="fas fa-magic mr-2"></i>
+                            Generate
+                        </button>
+                        <button id="updateBtn" class="btn-secondary px-6 py-3 rounded-lg text-white font-medium transition-all duration-300 flex items-center">
+                            <i class="fas fa-sync mr-2"></i>
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- API Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 modal-overlay hidden flex items-center justify-center z-50">
+        <div class="bg-gray-800 p-6 rounded-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-white">API Settings</h3>
+                <button id="closeSettingsBtn" class="text-gray-400 hover:text-white text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Security Warning -->
+            <div class="security-warning p-4 rounded-lg mb-6">
+                <div class="flex items-start">
+                    <i class="fas fa-exclamation-triangle text-yellow-600 mr-3 mt-1"></i>
+                    <div>
+                        <h4 class="font-semibold mb-2">Security Warning</h4>
+                        <p class="text-sm">Your API keys will be stored locally in your browser's localStorage. This is NOT recommended for production use. Consider using environment variables or a secure backend for production applications.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Instructions -->
+            <div class="security-info p-4 rounded-lg mb-6">
+                <div class="flex items-start">
+                    <i class="fas fa-info-circle text-blue-600 mr-3 mt-1"></i>
+                    <div>
+                        <h4 class="font-semibold mb-2">How to Get Your API Keys</h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• OpenAI: Visit <a href="https://platform.openai.com/api-keys" target="_blank" class="underline">platform.openai.com/api-keys</a></li>
+                            <li>• Anthropic: Visit <a href="https://console.anthropic.com/" target="_blank" class="underline">console.anthropic.com</a></li>
+                            <li>• Keys should start with "sk-" for OpenAI or "sk-ant-" for Anthropic</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- API Key Inputs -->
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        <i class="fas fa-key mr-2"></i>
+                        OpenAI API Key
+                    </label>
+                    <div class="flex space-x-2">
+                        <input 
+                            type="password" 
+                            id="openaiKeyInput" 
+                            class="input-field flex-1 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" 
+                            placeholder="sk-..."
+                        >
+                        <button id="toggleOpenaiKey" class="btn-secondary px-3 py-2 rounded-lg">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        <i class="fas fa-key mr-2"></i>
+                        Anthropic API Key (Optional)
+                    </label>
+                    <div class="flex space-x-2">
+                        <input 
+                            type="password" 
+                            id="claudeKeyInput" 
+                            class="input-field flex-1 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" 
+                            placeholder="sk-ant-..."
+                        >
+                        <button id="toggleClaudeKey" class="btn-secondary px-3 py-2 rounded-lg">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex space-x-3 mt-6">
+                <button id="saveKeysBtn" class="btn-primary flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all duration-300">
+                    <i class="fas fa-save mr-2"></i>
+                    Save Keys
+                </button>
+                <button id="clearKeysBtn" class="btn-danger flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all duration-300">
+                    <i class="fas fa-trash mr-2"></i>
+                    Clear Keys
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Project Name Modal -->
+    <div id="projectNameModal" class="fixed inset-0 modal-overlay hidden flex items-center justify-center z-50">
+        <div class="bg-gray-800 p-6 rounded-lg max-w-md w-full mx-4">
+            <h3 class="text-lg font-semibold text-white mb-4">Save Project</h3>
+            <input id="projectNameInput" type="text" class="input-field w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 mb-4" placeholder="Enter project name...">
+            <div class="flex space-x-3">
+                <button id="saveConfirmBtn" class="btn-primary flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all duration-300">Save</button>
+                <button id="saveCancelBtn" class="btn-secondary flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all duration-300">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monaco Editor -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.js"></script>
+    
+    <script>
+        // Global variables
+        let editor = null;
+        let currentProject = {
+            id: null,
+            name: 'Untitled Project',
+            html: '<!DOCTYPE html>\n<html>\n<head>\n    <title>My Project</title>\n</head>\n<body>\n    <h1>Hello World!</h1>\n</body>\n</html>',
+            css: 'body {\n    font-family: Arial, sans-serif;\n    margin: 0;\n    padding: 20px;\n    background-color: #f0f0f0;\n}\n\nh1 {\n    color: #333;\n    text-align: center;\n}',
+            js: '// Your JavaScript code here\nconsole.log("Hello World!");'
+        };
+        let currentLanguage = 'html';
+        let currentTab = 'thinking';
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMonacoEditor();
+            loadProjects();
+            setupEventListeners();
+            updatePreview();
+            checkApiKeys();
+        });
+        
+        // Initialize Monaco Editor
+        function initializeMonacoEditor() {
+            require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs' }});
+            require(['vs/editor/editor.main'], function () {
+                editor = monaco.editor.create(document.getElementById('editor'), {
+                    value: currentProject.html,
+                    language: 'html',
+                    theme: 'vs-dark',
+                    automaticLayout: true,
+                    fontSize: 14,
+                    lineNumbers: 'on',
+                    roundedSelection: false,
+                    scrollBeyondLastLine: false,
+                    readOnly: false,
+                    minimap: { enabled: true }
+                });
+                
+                // Auto-save changes
+                editor.onDidChangeModelContent(() => {
+                    const content = editor.getValue();
+                    currentProject[currentLanguage] = content;
+                    if (currentTab === 'preview') {
+                        updatePreview();
+                    }
+                });
+            });
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Tab switching
+            document.getElementById('thinkingTab').addEventListener('click', () => switchTab('thinking'));
+            document.getElementById('codeTab').addEventListener('click', () => switchTab('code'));
+            document.getElementById('previewTab').addEventListener('click', () => switchTab('preview'));
+            
+            // Code language switching
+            document.getElementById('htmlBtn').addEventListener('click', () => switchLanguage('html'));
+            document.getElementById('cssBtn').addEventListener('click', () => switchLanguage('css'));
+            document.getElementById('jsBtn').addEventListener('click', () => switchLanguage('js'));
+            
+            // Project management
+            document.getElementById('newProjectBtn').addEventListener('click', newProject);
+            document.getElementById('saveProjectBtn').addEventListener('click', () => showSaveModal());
+            document.getElementById('exportProjectBtn').addEventListener('click', exportProject);
+            
+            // AI Generation
+            document.getElementById('generateBtn').addEventListener('click', generateCode);
+            document.getElementById('updateBtn').addEventListener('click', updateCode);
+            
+            // Settings modal
+            document.getElementById('settingsBtn').addEventListener('click', showSettingsModal);
+            document.getElementById('closeSettingsBtn').addEventListener('click', hideSettingsModal);
+            document.getElementById('saveKeysBtn').addEventListener('click', saveApiKeys);
+            document.getElementById('clearKeysBtn').addEventListener('click', clearApiKeys);
+            document.getElementById('toggleOpenaiKey').addEventListener('click', () => toggleKeyVisibility('openaiKeyInput'));
+            document.getElementById('toggleClaudeKey').addEventListener('click', () => toggleKeyVisibility('claudeKeyInput'));
+            
+            // Project name modal handlers
+            document.getElementById('saveConfirmBtn').addEventListener('click', confirmSaveProject);
+            document.getElementById('saveCancelBtn').addEventListener('click', hideSaveModal);
+            document.getElementById('projectNameInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') confirmSaveProject();
+            });
+            
+            // Prompt input
+            document.getElementById('promptInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && e.ctrlKey) {
+                    generateCode();
+                }
+            });
+        }
+        
+        // API Key Management
+        function checkApiKeys() {
+            const openaiKey = localStorage.getItem('openai_api_key');
+            const claudeKey = localStorage.getItem('claude_api_key');
+            
+            const statusElement = document.getElementById('apiKeyStatus');
+            
+            if (openaiKey && validateApiKey(openaiKey, 'openai')) {
+                statusElement.className = 'api-key-status api-key-valid';
+                statusElement.innerHTML = '<i class="fas fa-check-circle mr-2"></i>API Key Valid';
+            } else {
+                statusElement.className = 'api-key-status api-key-invalid';
+                statusElement.innerHTML = '<i class="fas fa-exclamation-triangle mr-2"></i>API Key Required';
+            }
+        }
+        
+        function validateApiKey(key, provider) {
+            if (!key) return false;
+            
+            if (provider === 'openai') {
+                return key.startsWith('sk-') && key.length > 20;
+            } else if (provider === 'claude') {
+                return key.startsWith('sk-ant-') && key.length > 20;
+            }
+            
+            return false;
+        }
+        
+        function showSettingsModal() {
+            document.getElementById('settingsModal').classList.remove('hidden');
+            
+            // Load existing keys
+            const openaiKey = localStorage.getItem('openai_api_key') || '';
+            const claudeKey = localStorage.getItem('claude_api_key') || '';
+            
+            document.getElementById('openaiKeyInput').value = openaiKey;
+            document.getElementById('claudeKeyInput').value = claudeKey;
+        }
+        
+        function hideSettingsModal() {
+            document.getElementById('settingsModal').classList.add('hidden');
+        }
+        
+        function toggleKeyVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.nextElementSibling;
+            const icon = button.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        }
+        
+        function saveApiKeys() {
+            const openaiKey = document.getElementById('openaiKeyInput').value.trim();
+            const claudeKey = document.getElementById('claudeKeyInput').value.trim();
+            
+            if (openaiKey && !validateApiKey(openaiKey, 'openai')) {
+                showToast('Invalid OpenAI API key format', 'error');
+                return;
+            }
+            
+            if (claudeKey && !validateApiKey(claudeKey, 'claude')) {
+                showToast('Invalid Claude API key format', 'error');
+                return;
+            }
+            
+            if (openaiKey) {
+                localStorage.setItem('openai_api_key', openaiKey);
+            }
+            
+            if (claudeKey) {
+                localStorage.setItem('claude_api_key', claudeKey);
+            }
+            
+            checkApiKeys();
+            hideSettingsModal();
+            showToast('API keys saved successfully!');
+        }
+        
+        function clearApiKeys() {
+            if (confirm('Are you sure you want to clear all API keys?')) {
+                localStorage.removeItem('openai_api_key');
+                localStorage.removeItem('claude_api_key');
+                
+                document.getElementById('openaiKeyInput').value = '';
+                document.getElementById('claudeKeyInput').value = '';
+                
+                checkApiKeys();
+                showToast('API keys cleared');
+            }
+        }
+        
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('[id$="Tab"]').forEach(tab => {
+                tab.className = tab.id === `${tabName}Tab` ? 'tab-active px-6 py-3 rounded-lg font-medium transition-all duration-300' : 'tab-inactive px-6 py-3 rounded-lg font-medium transition-all duration-300';
+            });
+            
+            // Update tab content
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.add('hidden');
+            });
+            document.getElementById(`${tabName}Content`).classList.remove('hidden');
+            
+            currentTab = tabName;
+            
+            if (tabName === 'preview') {
+                updatePreview();
+            }
+        }
+        
+        // Language switching for code editor
+        function switchLanguage(lang) {
+            if (!editor) return;
+            
+            // Save current content
+            currentProject[currentLanguage] = editor.getValue();
+            
+            // Switch language
+            currentLanguage = lang;
+            const languageMap = { html: 'html', css: 'css', js: 'javascript' };
+            
+            monaco.editor.setModelLanguage(editor.getModel(), languageMap[lang]);
+            editor.setValue(currentProject[lang]);
+            
+            // Update button states
+            document.getElementById('htmlBtn').className = lang === 'html' ? 'btn-primary px-4 py-2 rounded-lg text-white font-medium transition-all duration-300' : 'btn-secondary px-4 py-2 rounded-lg text-white font-medium transition-all duration-300';
+            document.getElementById('cssBtn').className = lang === 'css' ? 'btn-primary px-4 py-2 rounded-lg text-white font-medium transition-all duration-300' : 'btn-secondary px-4 py-2 rounded-lg text-white font-medium transition-all duration-300';
+            document.getElementById('jsBtn').className = lang === 'js' ? 'btn-primary px-4 py-2 rounded-lg text-white font-medium transition-all duration-300' : 'btn-secondary px-4 py-2 rounded-lg text-white font-medium transition-all duration-300';
+        }
+        
+        // Update live preview
+        function updatePreview() {
+            const iframe = document.getElementById('previewFrame');
+            const html = currentProject.html;
+            const css = currentProject.css;
+            const js = currentProject.js;
+            
+            const fullHTML = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>${css}</style>
+                </head>
+                <body>
+                    ${html.replace(/<!DOCTYPE html>|<html.*?>|<\/html>|<head.*?>|<\/head>|<body.*?>|<\/body>/gi, '')}
+                    <script>
+                        try {
+                            ${js}
+                        } catch (e) {
+                            console.error('JavaScript Error:', e);
+                        }
+                    </script>
+                </body>
+                </html>
+            `;
+            
+            iframe.srcdoc = fullHTML;
+        }
+        
+        // Project management functions
+        function newProject() {
+            currentProject = {
+                id: null,
+                name: 'Untitled Project',
+                html: '<!DOCTYPE html>\n<html>\n<head>\n    <title>My Project</title>\n</head>\n<body>\n    <h1>Hello World!</h1>\n</body>\n</html>',
+                css: 'body {\n    font-family: Arial, sans-serif;\n    margin: 0;\n    padding: 20px;\n    background-color: #f0f0f0;\n}\n\nh1 {\n    color: #333;\n    text-align: center;\n}',
+                js: '// Your JavaScript code here\nconsole.log("Hello World!");'
+            };
+            
+            if (editor) {
+                editor.setValue(currentProject[currentLanguage]);
+            }
+            
+            updatePreview();
+            clearThinking();
+            document.getElementById('promptInput').value = '';
+        }
+        
+        function showSaveModal() {
+            document.getElementById('projectNameInput').value = currentProject.name;
+            document.getElementById('projectNameModal').classList.remove('hidden');
+            document.getElementById('projectNameInput').focus();
+        }
+        
+        function hideSaveModal() {
+            document.getElementById('projectNameModal').classList.add('hidden');
+        }
+        
+        function confirmSaveProject() {
+            const projectName = document.getElementById('projectNameInput').value.trim();
+            if (!projectName) return;
+            
+            currentProject.name = projectName;
+            currentProject.id = currentProject.id || Date.now().toString();
+            
+            const projects = JSON.parse(localStorage.getItem('aiCodeProjects') || '[]');
+            const existingIndex = projects.findIndex(p => p.id === currentProject.id);
+            
+            if (existingIndex >= 0) {
+                projects[existingIndex] = { ...currentProject };
+            } else {
+                projects.push({ ...currentProject });
+            }
+            
+            localStorage.setItem('aiCodeProjects', JSON.stringify(projects));
+            loadProjects();
+            hideSaveModal();
+            
+            showToast('Project saved successfully!');
+        }
+        
+        function loadProjects() {
+            const projects = JSON.parse(localStorage.getItem('aiCodeProjects') || '[]');
+            const projectsList = document.getElementById('projectsList');
+            
+            projectsList.innerHTML = '';
+            
+            if (projects.length === 0) {
+                projectsList.innerHTML = '<p class="text-gray-500 text-sm text-center py-4">No saved projects</p>';
+                return;
+            }
+            
+            projects.forEach(project => {
+                const projectElement = document.createElement('div');
+                projectElement.className = 'project-item p-3 rounded-lg cursor-pointer';
+                projectElement.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <h3 class="text-white font-medium text-sm truncate">${project.name}</h3>
+                            <p class="text-gray-400 text-xs mt-1">Modified ${new Date(parseInt(project.id)).toLocaleDateString()}</p>
+                        </div>
+                        <div class="flex space-x-1 ml-2">
+                            <button onclick="loadProject('${project.id}')" class="text-blue-400 hover:text-blue-300 p-1">
+                                <i class="fas fa-folder-open text-xs"></i>
+                            </button>
+                            <button onclick="deleteProject('${project.id}')" class="text-red-400 hover:text-red-300 p-1">
+                                <i class="fas fa-trash text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                projectsList.appendChild(projectElement);
+            });
+        }
+        
+        function loadProject(projectId) {
+            const projects = JSON.parse(localStorage.getItem('aiCodeProjects') || '[]');
+            const project = projects.find(p => p.id === projectId);
+            
+            if (project) {
+                currentProject = { ...project };
+                if (editor) {
+                    editor.setValue(currentProject[currentLanguage]);
+                }
+                updatePreview();
+                showToast('Project loaded successfully!');
+            }
+        }
+        
+        function deleteProject(projectId) {
+            if (confirm('Are you sure you want to delete this project?')) {
+                const projects = JSON.parse(localStorage.getItem('aiCodeProjects') || '[]');
+                const filteredProjects = projects.filter(p => p.id !== projectId);
+                localStorage.setItem('aiCodeProjects', JSON.stringify(filteredProjects));
+                loadProjects();
+                showToast('Project deleted successfully!');
+            }
+        }
+        
+        function exportProject() {
+            const dataStr = JSON.stringify(currentProject, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${currentProject.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+        
+        // AI Code Generation
+        async function generateCode() {
+            const prompt = document.getElementById('promptInput').value.trim();
+            if (!prompt) return;
+            
+            const apiKey = localStorage.getItem('openai_api_key');
+            if (!apiKey) {
+                showToast('Please add your OpenAI API key in settings', 'error');
+                showSettingsModal();
+                return;
+            }
+            
+            const generateBtn = document.getElementById('generateBtn');
+            const originalHTML = generateBtn.innerHTML;
+            
+            try {
+                generateBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Generating...';
+                generateBtn.disabled = true;
+                
+                // Switch to thinking tab and show AI thinking
+                switchTab('thinking');
+                updateThinking('🤔 Analyzing your request...\n\nPrompt: "' + prompt + '"\n\nConnecting to OpenAI GPT-4...');
+                
+                // Make API call to OpenAI
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-4',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'You are a professional web developer. Generate clean, modern HTML, CSS, and JavaScript code based on user requests. Always provide complete, functional code. Return your response in JSON format with "thinking", "html", "css", and "js" fields.'
+                            },
+                            {
+                                role: 'user',
+                                content: `Generate code for: ${prompt}\n\nProvide your response in this JSON format:\n{\n  "thinking": "Your detailed thought process and explanation",\n  "html": "Complete HTML code",\n  "css": "Complete CSS code",\n  "js": "Complete JavaScript code"\n}`
+                            }
+                        ],
+                        max_tokens: 2000,
+                        temperature: 0.7
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                const aiResponse = data.choices[0].message.content;
+                
+                // Try to parse JSON response
+                let parsedResponse;
+                try {
+                    parsedResponse = JSON.parse(aiResponse);
+                } catch (e) {
+                    // If JSON parsing fails, create a structured response
+                    parsedResponse = {
+                        thinking: `✨ Generated code for: "${prompt}"\n\n${aiResponse}`,
+                        html: currentProject.html,
+                        css: currentProject.css,
+                        js: currentProject.js
+                    };
+                }
+                
+                updateThinking(parsedResponse.thinking);
+                
+                // Update code
+                if (parsedResponse.html) currentProject.html = parsedResponse.html;
+                if (parsedResponse.css) currentProject.css = parsedResponse.css;
+                if (parsedResponse.js) currentProject.js = parsedResponse.js;
+                
+                // Update editor if in code tab
+                if (editor) {
+                    editor.setValue(currentProject[currentLanguage]);
+                }
+                
+                updatePreview();
+                document.getElementById('promptInput').value = '';
+                showToast('Code generated successfully!');
+                
+            } catch (error) {
+                console.error('Error generating code:', error);
+                updateThinking('❌ Error: ' + error.message + '\n\nPlease check your API key and try again.');
+                showToast('Error generating code. Please check your API key.', 'error');
+            } finally {
+                generateBtn.innerHTML = originalHTML;
+                generateBtn.disabled = false;
+            }
+        }
+        
+        async function updateCode() {
+            const prompt = document.getElementById('promptInput').value.trim();
+            if (!prompt) return;
+            
+            const apiKey = localStorage.getItem('openai_api_key');
+            if (!apiKey) {
+                showToast('Please add your OpenAI API key in settings', 'error');
+                showSettingsModal();
+                return;
+            }
+            
+            const updateBtn = document.getElementById('updateBtn');
+            const originalHTML = updateBtn.innerHTML;
+            
+            try {
+                updateBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Updating...';
+                updateBtn.disabled = true;
+                
+                switchTab('thinking');
+                updateThinking('🔄 Analyzing current code and your update request...\n\nUpdate: "' + prompt + '"\n\nConnecting to OpenAI GPT-4...');
+                
+                // Make API call to OpenAI with current code context
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-4',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'You are a professional web developer. Update the existing code based on user requests. Always provide complete, functional code. Return your response in JSON format with "thinking", "html", "css", and "js" fields.'
+                            },
+                            {
+                                role: 'user',
+                                content: `Current code:\n\nHTML:\n${currentProject.html}\n\nCSS:\n${currentProject.css}\n\nJS:\n${currentProject.js}\n\nUpdate request: ${prompt}\n\nProvide your response in this JSON format:\n{\n  "thinking": "Your detailed thought process and explanation",\n  "html": "Updated HTML code",\n  "css": "Updated CSS code",\n  "js": "Updated JavaScript code"\n}`
+                            }
+                        ],
+                        max_tokens: 2000,
+                        temperature: 0.7
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                const aiResponse = data.choices[0].message.content;
+                
+                // Try to parse JSON response
+                let parsedResponse;
+                try {
+                    parsedResponse = JSON.parse(aiResponse);
+                } catch (e) {
+                    // If JSON parsing fails, create a structured response
+                    parsedResponse = {
+                        thinking: `✨ Updated code for: "${prompt}"\n\n${aiResponse}`,
+                        html: currentProject.html,
+                        css: currentProject.css,
+                        js: currentProject.js
+                    };
+                }
+                
+                updateThinking(parsedResponse.thinking);
+                
+                // Update code
+                if (parsedResponse.html) currentProject.html = parsedResponse.html;
+                if (parsedResponse.css) currentProject.css = parsedResponse.css;
+                if (parsedResponse.js) currentProject.js = parsedResponse.js;
+                
+                if (editor) {
+                    editor.setValue(currentProject[currentLanguage]);
+                }
+                
+                updatePreview();
+                document.getElementById('promptInput').value = '';
+                showToast('Code updated successfully!');
+                
+            } catch (error) {
+                console.error('Error updating code:', error);
+                updateThinking('❌ Error: ' + error.message + '\n\nPlease check your API key and try again.');
+                showToast('Error updating code. Please check your API key.', 'error');
+            } finally {
+                updateBtn.innerHTML = originalHTML;
+                updateBtn.disabled = false;
+            }
+        }
+        
+        // Utility functions
+        function updateThinking(text) {
+            document.getElementById('thinkingText').innerHTML = `<div class="fade-in">${text.replace(/\n/g, '<br>')}</div>`;
+        }
+        
+        function clearThinking() {
+            document.getElementById('thinkingText').innerHTML = `
+                <div class="text-center text-gray-500 mt-20">
+                    <i class="fas fa-lightbulb text-4xl mb-4"></i>
+                    <p>AI thoughts and explanations will appear here...</p>
+                    <p class="text-sm mt-2">Click the settings icon to add your API key first</p>
+                </div>
+            `;
+        }
+        
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-medium z-50 fade-in ${type === 'error' ? 'bg-red-500' : 'bg-green-500'}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // Make functions global for onclick handlers
+        window.loadProject = loadProject;
+        window.deleteProject = deleteProject;
+    </script>
+</body>
+</html>
