@@ -1,691 +1,461 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Super Agent - Genspark Style</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Code Assist - AI Code Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        * {
-            font-family: 'Inter', sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
-            color: #ffffff;
-            min-height: 100vh;
-        }
-        
-        .genspark-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .genspark-card {
-            background: rgba(26, 26, 46, 0.8);
-            border: 1px solid rgba(102, 126, 234, 0.2);
-            backdrop-filter: blur(10px);
-        }
-        
-        .thinking-bubble {
-            background: rgba(16, 16, 30, 0.9);
-            border-left: 4px solid #667eea;
-            animation: fadeIn 0.5s ease-in;
-        }
-        
-        .iteration-badge {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .code-output {
-            background: #1a1a2e;
-            border: 1px solid #667eea;
-            border-radius: 8px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        
-        .preview-container {
-            background: white;
-            border: 1px solid #667eea;
-            border-radius: 8px;
-            min-height: 400px;
-            overflow: hidden;
-        }
-        
-        .fullscreen-preview {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 9999;
-            background: white;
-        }
-        
-        .fullscreen-controls {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-        }
-        
-        .loading-dots {
-            display: inline-block;
-            position: relative;
-            width: 80px;
-            height: 20px;
-        }
-        
-        .loading-dots div {
-            position: absolute;
-            top: 8px;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #667eea;
-            animation-timing-function: cubic-bezier(0, 1, 1, 0);
-        }
-        
-        .loading-dots div:nth-child(1) {
-            left: 8px;
-            animation: loading1 0.6s infinite;
-        }
-        
-        .loading-dots div:nth-child(2) {
-            left: 8px;
-            animation: loading2 0.6s infinite;
-        }
-        
-        .loading-dots div:nth-child(3) {
-            left: 32px;
-            animation: loading2 0.6s infinite;
-        }
-        
-        .loading-dots div:nth-child(4) {
-            left: 56px;
-            animation: loading3 0.6s infinite;
-        }
-        
-        @keyframes loading1 {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
-        }
-        
-        @keyframes loading3 {
-            0% { transform: scale(1); }
-            100% { transform: scale(0); }
-        }
-        
-        @keyframes loading2 {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(24px, 0); }
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .pulse-glow {
-            animation: pulseGlow 2s ease-in-out infinite alternate;
-        }
-        
-        @keyframes pulseGlow {
-            from { box-shadow: 0 0 20px rgba(102, 126, 234, 0.3); }
-            to { box-shadow: 0 0 30px rgba(102, 126, 234, 0.6); }
-        }
-        
-        .scrollbar-hide {
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        
+        /* Custom scrollbar for dark theme */
         .custom-scrollbar::-webkit-scrollbar {
             width: 8px;
         }
-        
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(16, 16, 30, 0.5);
+            background: #1e293b;
         }
-        
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(102, 126, 234, 0.5);
+            background: #475569;
             border-radius: 4px;
         }
-        
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(102, 126, 234, 0.7);
+            background: #64748b;
+        }
+        
+        /* Code syntax highlighting */
+        .code-block {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            line-height: 1.5;
+        }
+        
+        /* Preview iframe styling */
+        .preview-frame {
+            border: none;
+            width: 100%;
+            height: 100%;
+            background: white;
+        }
+        
+        /* Loading animation */
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
         }
     </style>
 </head>
-<body class="min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold mb-2">
-                <i class="fas fa-robot mr-3 text-purple-400"></i>
-                Code Super Agent
-            </h1>
-            <p class="text-gray-400 text-lg">Genspark-Style Iterative Code Generator</p>
-        </div>
-        
-        <!-- API Key Configuration -->
-        <div class="genspark-card rounded-lg p-6 mb-8" id="apiKeySection">
-            <h2 class="text-xl font-semibold mb-4 flex items-center">
-                <i class="fas fa-key mr-2 text-yellow-400"></i>
-                API Configuration
-            </h2>
-            <div class="flex gap-4">
-                <input type="password" id="apiKeyInput" placeholder="Enter your OpenAI API key..." 
-                       class="flex-1 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg focus:border-purple-400 focus:outline-none">
-                <button id="saveApiKeyBtn" class="genspark-gradient px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity">
-                    <i class="fas fa-save mr-2"></i>Save
-                </button>
-                <button id="clearApiKeyBtn" class="bg-red-600 px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors">
-                    <i class="fas fa-trash mr-2"></i>Clear
-                </button>
-            </div>
-            <div id="apiKeyStatus" class="mt-2 text-sm"></div>
-        </div>
-        
-        <!-- Project Input -->
-        <div class="genspark-card rounded-lg p-6 mb-8">
-            <h2 class="text-xl font-semibold mb-4 flex items-center">
-                <i class="fas fa-lightbulb mr-2 text-yellow-400"></i>
-                Project Description
-            </h2>
-            <textarea id="projectInput" rows="4" placeholder="Describe what you want to build... (e.g., 'Create a todo app with drag and drop functionality')" 
-                      class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg focus:border-purple-400 focus:outline-none resize-none"></textarea>
-            <div class="flex justify-between items-center mt-4">
-                <div class="flex items-center gap-4">
-                    <label class="flex items-center">
-                        <input type="number" id="iterationCount" value="3" min="1" max="10" 
-                               class="w-16 px-2 py-1 bg-gray-800 border border-gray-600 rounded text-center">
-                        <span class="ml-2 text-sm text-gray-400">Iterations</span>
-                    </label>
+<body class="bg-dark-900 text-gray-100 font-sans">
+    <!-- Top Bar -->
+    <header class="bg-dark-800 border-b border-dark-700 px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                    </svg>
                 </div>
-                <button id="startAgentBtn" class="genspark-gradient px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity pulse-glow">
-                    <i class="fas fa-play mr-2"></i>Start Super Agent
-                </button>
-            </div>
-        </div>
-        
-        <!-- Agent Process -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Left Column: Process & Thinking -->
-            <div class="space-y-6">
-                <!-- Process Status -->
-                <div class="genspark-card rounded-lg p-6">
-                    <h2 class="text-xl font-semibold mb-4 flex items-center">
-                        <i class="fas fa-cogs mr-2 text-blue-400"></i>
-                        Agent Process
-                    </h2>
-                    <div id="processStatus" class="text-center text-gray-400 py-8">
-                        <i class="fas fa-robot text-4xl mb-4 opacity-50"></i>
-                        <p>Ready to start coding...</p>
-                    </div>
-                    <div id="iterationProgress" class="hidden space-y-4"></div>
-                </div>
-                
-                <!-- Thinking Process -->
-                <div class="genspark-card rounded-lg p-6">
-                    <h2 class="text-xl font-semibold mb-4 flex items-center">
-                        <i class="fas fa-brain mr-2 text-pink-400"></i>
-                        AI Thinking
-                    </h2>
-                    <div id="thinkingProcess" class="space-y-4 custom-scrollbar" style="max-height: 400px; overflow-y: auto;">
-                        <div class="text-center text-gray-400 py-8">
-                            <i class="fas fa-lightbulb text-4xl mb-4 opacity-50"></i>
-                            <p>AI thoughts will appear here...</p>
-                        </div>
-                    </div>
-                </div>
+                <h1 class="text-xl font-bold text-white">Code Assist</h1>
             </div>
             
-            <!-- Right Column: Code & Preview -->
-            <div class="space-y-6">
-                <!-- Generated Code -->
-                <div class="genspark-card rounded-lg p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-semibold flex items-center">
-                            <i class="fas fa-code mr-2 text-green-400"></i>
-                            Generated Code
-                        </h2>
-                        <button id="downloadCodeBtn" class="hidden bg-green-600 px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors">
-                            <i class="fas fa-download mr-2"></i>Download
-                        </button>
-                    </div>
-                    <div id="codeOutput" class="code-output p-4 custom-scrollbar">
-                        <div class="text-center text-gray-400 py-8">
-                            <i class="fas fa-file-code text-4xl mb-4 opacity-50"></i>
-                            <p>Generated code will appear here...</p>
-                        </div>
-                    </div>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
+                    <input 
+                        type="password" 
+                        id="apiKeyInput" 
+                        placeholder="Paste Your API Key" 
+                        class="bg-dark-700 border border-dark-600 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 w-64"
+                    >
+                    <button 
+                        id="saveApiKey" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-dark-800"
+                    >
+                        Save
+                    </button>
                 </div>
-                
-                <!-- Live Preview -->
-                <div class="genspark-card rounded-lg p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-semibold flex items-center">
-                            <i class="fas fa-eye mr-2 text-purple-400"></i>
-                            Live Preview
-                        </h2>
-                        <button id="fullscreenBtn" class="hidden bg-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors">
-                            <i class="fas fa-expand mr-2"></i>Fullscreen
-                        </button>
-                    </div>
-                    <div id="previewContainer" class="preview-container">
-                        <div class="flex items-center justify-center h-full text-gray-400">
-                            <div class="text-center">
-                                <i class="fas fa-desktop text-4xl mb-4 opacity-50"></i>
-                                <p>Live preview will appear here...</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div id="apiKeyStatus" class="text-sm text-gray-400"></div>
             </div>
         </div>
-    </div>
-    
-    <!-- Fullscreen Preview Modal -->
-    <div id="fullscreenModal" class="hidden">
-        <div class="fullscreen-preview">
-            <div class="fullscreen-controls">
-                <button id="exitFullscreenBtn" class="bg-red-600 px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors">
-                    <i class="fas fa-times mr-2"></i>Exit Fullscreen
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex h-screen overflow-hidden">
+        <!-- Left Panel - Prompt Input -->
+        <div class="w-1/3 bg-dark-800 border-r border-dark-700 flex flex-col">
+            <div class="p-6 border-b border-dark-700">
+                <h2 class="text-lg font-semibold text-white mb-4">Code Prompt</h2>
+                <textarea 
+                    id="promptInput" 
+                    placeholder="Describe what you want to build... (e.g., 'Create a dark mode landing page with Tailwind CSS')"
+                    class="w-full h-32 bg-dark-700 border border-dark-600 rounded-lg p-3 text-gray-100 placeholder-gray-400 resize-none focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 custom-scrollbar"
+                ></textarea>
+                <button 
+                    id="generateBtn" 
+                    class="w-full mt-4 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-dark-800"
+                >
+                    <span id="generateBtnText">Generate Code</span>
                 </button>
             </div>
-            <div id="fullscreenContent" class="w-full h-full"></div>
+            
+            <!-- Thinking Area -->
+            <div class="flex-1 p-6">
+                <h3 class="text-md font-semibold text-white mb-3">AI Thinking Process</h3>
+                <div id="thinkingArea" class="bg-dark-700 rounded-lg p-4 h-full overflow-y-auto custom-scrollbar">
+                    <p class="text-gray-400 text-sm">Click "Generate Code" to start the AI assistant...</p>
+                </div>
+            </div>
         </div>
-    </div>
+
+        <!-- Center Panel - Code Output -->
+        <div class="w-1/3 bg-dark-900 border-r border-dark-700 flex flex-col">
+            <div class="p-6 border-b border-dark-700">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-white">Generated Code</h2>
+                    <button 
+                        id="copyCodeBtn" 
+                        class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-dark-900"
+                        style="display: none;"
+                    >
+                        Copy
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 p-6">
+                <div id="codeOutput" class="bg-dark-800 rounded-lg p-4 h-full overflow-y-auto custom-scrollbar code-block">
+                    <p class="text-gray-400 text-sm">Generated code will appear here...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Live Preview -->
+        <div class="w-1/3 bg-dark-900 flex flex-col">
+            <div class="p-6 border-b border-dark-700">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-white">Live Preview</h2>
+                    <button 
+                        id="refreshPreview" 
+                        class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-dark-900"
+                        style="display: none;"
+                    >
+                        Refresh
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 p-6">
+                <div id="previewContainer" class="bg-white rounded-lg h-full overflow-hidden">
+                    <div class="h-full flex items-center justify-center text-gray-500">
+                        <div class="text-center">
+                            <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            <p class="text-sm">Live preview will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <script>
-        // Global variables
-        let apiKey = localStorage.getItem('openai_api_key') || '';
-        let isProcessing = false;
-        let currentIteration = 0;
-        let maxIterations = 3;
-        let generatedCode = '';
-        let conversationHistory = [];
-        
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeApp();
-            setupEventListeners();
-            updateApiKeyStatus();
-        });
-        
-        function initializeApp() {
-            // Load saved API key
-            if (apiKey) {
-                document.getElementById('apiKeyInput').value = apiKey;
-                updateApiKeyStatus();
-            }
-        }
-        
-        function setupEventListeners() {
-            // API Key Management
-            document.getElementById('saveApiKeyBtn').addEventListener('click', saveApiKey);
-            document.getElementById('clearApiKeyBtn').addEventListener('click', clearApiKey);
-            
-            // Main Process
-            document.getElementById('startAgentBtn').addEventListener('click', startSuperAgent);
-            
-            // Preview Controls
-            document.getElementById('fullscreenBtn').addEventListener('click', enterFullscreen);
-            document.getElementById('exitFullscreenBtn').addEventListener('click', exitFullscreen);
-            document.getElementById('downloadCodeBtn').addEventListener('click', downloadCode);
-            
-            // Keyboard shortcuts
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && document.getElementById('fullscreenModal').classList.contains('block')) {
-                    exitFullscreen();
-                }
-            });
-        }
-        
-        function saveApiKey() {
-            const key = document.getElementById('apiKeyInput').value.trim();
-            if (key) {
-                apiKey = key;
-                localStorage.setItem('openai_api_key', key);
-                updateApiKeyStatus();
-                showNotification('API key saved successfully!', 'success');
-            } else {
-                showNotification('Please enter a valid API key', 'error');
-            }
-        }
-        
-        function clearApiKey() {
-            apiKey = '';
-            localStorage.removeItem('openai_api_key');
-            document.getElementById('apiKeyInput').value = '';
-            updateApiKeyStatus();
-            showNotification('API key cleared', 'info');
-        }
-        
-        function updateApiKeyStatus() {
-            const statusDiv = document.getElementById('apiKeyStatus');
-            if (apiKey) {
-                statusDiv.innerHTML = '<i class="fas fa-check-circle text-green-400 mr-2"></i>API key configured';
-                statusDiv.className = 'mt-2 text-sm text-green-400';
-            } else {
-                statusDiv.innerHTML = '<i class="fas fa-exclamation-circle text-yellow-400 mr-2"></i>Please configure your API key';
-                statusDiv.className = 'mt-2 text-sm text-yellow-400';
-            }
-        }
-        
-        async function startSuperAgent() {
-            if (!apiKey) {
-                showNotification('Please configure your API key first', 'error');
-                return;
-            }
-            
-            const projectDescription = document.getElementById('projectInput').value.trim();
-            if (!projectDescription) {
-                showNotification('Please describe what you want to build', 'error');
-                return;
-            }
-            
-            if (isProcessing) {
-                showNotification('Agent is already running', 'warning');
-                return;
-            }
-            
-            // Initialize process
-            isProcessing = true;
-            currentIteration = 0;
-            maxIterations = parseInt(document.getElementById('iterationCount').value);
-            generatedCode = '';
-            conversationHistory = [];
-            
-            // Update UI
-            document.getElementById('startAgentBtn').disabled = true;
-            document.getElementById('startAgentBtn').innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
-            
-            // Clear previous results
-            document.getElementById('codeOutput').innerHTML = '';
-            document.getElementById('previewContainer').innerHTML = '';
-            document.getElementById('thinkingProcess').innerHTML = '';
-            
-            // Start the iterative process
-            await runIterativeProcess(projectDescription);
-            
-            // Reset UI
-            isProcessing = false;
-            document.getElementById('startAgentBtn').disabled = false;
-            document.getElementById('startAgentBtn').innerHTML = '<i class="fas fa-play mr-2"></i>Start Super Agent';
-        }
-        
-        async function runIterativeProcess(projectDescription) {
-            updateProcessStatus('Initializing Super Agent...');
-            
-            // Initial prompt
-            let currentPrompt = `Create a complete, self-contained HTML file for: ${projectDescription}. 
-            
-            Requirements:
-            - Single HTML file with embedded CSS and JavaScript
-            - Professional, modern design
-            - Fully functional and interactive
-            - Responsive layout
-            - Clean, well-structured code
-            - Include all necessary styles and scripts inline
-            
-            Please provide a complete HTML file ready to run.`;
-            
-            for (let i = 0; i < maxIterations; i++) {
-                currentIteration = i + 1;
-                updateProcessStatus(`Running iteration ${currentIteration} of ${maxIterations}`);
+        class CodeAssistant {
+            constructor() {
+                this.apiKey = '';
+                this.isGenerating = false;
+                this.currentCode = '';
                 
-                try {
-                    // Generate code
-                    const response = await callOpenAI(currentPrompt);
-                    
-                    // Update thinking process
-                    addThinkingBubble(`Iteration ${currentIteration}`, response.thinking || 'Processing request...');
-                    
-                    // Update code (combining with previous if not first iteration)
-                    if (i === 0) {
-                        generatedCode = response.code;
-                    } else {
-                        generatedCode = response.code; // For now, replace completely - but in a real implementation, we'd combine intelligently
-                    }
-                    
-                    // Update displays
-                    updateCodeOutput(generatedCode);
-                    updatePreview(generatedCode);
-                    
-                    // Prepare next iteration prompt
-                    if (i < maxIterations - 1) {
-                        currentPrompt = `Improve the following HTML file by adding more features, better styling, enhanced functionality, and optimizations. Keep it as a single HTML file:
+                this.initializeElements();
+                this.loadApiKey();
+                this.attachEventListeners();
+            }
 
-                        Current code:
-                        ${generatedCode}
-                        
-                        Enhancements to add:
-                        - Better visual design and animations
-                        - Additional functionality
-                        - Improved user experience
-                        - Performance optimizations
-                        - Error handling
-                        - Accessibility improvements
-                        
-                        Provide the complete improved HTML file.`;
-                    }
+            initializeElements() {
+                this.apiKeyInput = document.getElementById('apiKeyInput');
+                this.saveApiKeyBtn = document.getElementById('saveApiKey');
+                this.apiKeyStatus = document.getElementById('apiKeyStatus');
+                this.promptInput = document.getElementById('promptInput');
+                this.generateBtn = document.getElementById('generateBtn');
+                this.generateBtnText = document.getElementById('generateBtnText');
+                this.thinkingArea = document.getElementById('thinkingArea');
+                this.codeOutput = document.getElementById('codeOutput');
+                this.copyCodeBtn = document.getElementById('copyCodeBtn');
+                this.previewContainer = document.getElementById('previewContainer');
+                this.refreshPreview = document.getElementById('refreshPreview');
+            }
+
+            loadApiKey() {
+                const savedKey = localStorage.getItem('codeAssistApiKey');
+                if (savedKey) {
+                    this.apiKey = savedKey;
+                    this.apiKeyStatus.textContent = '✓ API Key Saved';
+                    this.apiKeyStatus.className = 'text-sm text-green-400';
+                    this.apiKeyInput.value = '';
+                    this.apiKeyInput.placeholder = 'API Key is saved securely';
+                }
+            }
+
+            attachEventListeners() {
+                this.saveApiKeyBtn.addEventListener('click', () => this.saveApiKey());
+                this.generateBtn.addEventListener('click', () => this.generateCode());
+                this.copyCodeBtn.addEventListener('click', () => this.copyCode());
+                this.refreshPreview.addEventListener('click', () => this.updatePreview());
+                
+                // Enter key shortcuts
+                this.apiKeyInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.saveApiKey();
+                });
+                
+                this.promptInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && e.ctrlKey) this.generateCode();
+                });
+            }
+
+            saveApiKey() {
+                const key = this.apiKeyInput.value.trim();
+                if (!key) {
+                    this.showApiKeyStatus('Please enter an API key', 'error');
+                    return;
+                }
+
+                if (!key.startsWith('sk-') && !key.startsWith('claude-')) {
+                    this.showApiKeyStatus('Invalid API key format', 'error');
+                    return;
+                }
+
+                this.apiKey = key;
+                localStorage.setItem('codeAssistApiKey', key);
+                this.apiKeyInput.value = '';
+                this.apiKeyInput.placeholder = 'API Key is saved securely';
+                this.showApiKeyStatus('✓ API Key Saved', 'success');
+            }
+
+            showApiKeyStatus(message, type) {
+                this.apiKeyStatus.textContent = message;
+                this.apiKeyStatus.className = `text-sm ${type === 'error' ? 'text-red-400' : 'text-green-400'}`;
+            }
+
+            async generateCode() {
+                if (this.isGenerating) return;
+                
+                const prompt = this.promptInput.value.trim();
+                if (!prompt) {
+                    alert('Please enter a code prompt');
+                    return;
+                }
+
+                if (!this.apiKey) {
+                    alert('Please save your API key first');
+                    return;
+                }
+
+                this.setGeneratingState(true);
+                this.showThinking('🤔 Analyzing your request...');
+
+                try {
+                    // Determine API endpoint based on key type
+                    const isOpenAI = this.apiKey.startsWith('sk-');
+                    const apiUrl = isOpenAI ? 'https://api.openai.com/v1/chat/completions' : 'https://api.anthropic.com/v1/messages';
                     
-                    // Add delay between iterations
-                    if (i < maxIterations - 1) {
-                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    this.showThinking('🔗 Connecting to AI service...');
+                    
+                    const requestBody = isOpenAI ? {
+                        model: "gpt-3.5-turbo",
+                        messages: [
+                            {
+                                role: "system",
+                                content: "You are a helpful coding assistant. Generate clean, working code based on user requests. For web development, include complete HTML with embedded CSS and JavaScript. Respond only with the code, no explanations or markdown formatting."
+                            },
+                            {
+                                role: "user",
+                                content: prompt
+                            }
+                        ],
+                        max_tokens: 2000,
+                        temperature: 0.7
+                    } : {
+                        model: "claude-3-sonnet-20240229",
+                        max_tokens: 2000,
+                        messages: [
+                            {
+                                role: "user",
+                                content: `You are a helpful coding assistant. Generate clean, working code based on this request: ${prompt}. For web development, include complete HTML with embedded CSS and JavaScript. Respond only with the code, no explanations or markdown formatting.`
+                            }
+                        ]
+                    };
+
+                    const headers = isOpenAI ? {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.apiKey}`
+                    } : {
+                        'Content-Type': 'application/json',
+                        'x-api-key': this.apiKey,
+                        'anthropic-version': '2023-06-01'
+                    };
+
+                    this.showThinking('🚀 Generating your code...');
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify(requestBody)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(`API Error: ${errorData.error?.message || response.statusText}`);
                     }
+
+                    const data = await response.json();
+                    this.showThinking('✨ Processing generated code...');
+
+                    // Extract code from response
+                    let generatedCode;
+                    if (isOpenAI) {
+                        generatedCode = data.choices[0].message.content;
+                    } else {
+                        generatedCode = data.content[0].text;
+                    }
+
+                    this.currentCode = generatedCode;
+                    this.displayCode(generatedCode);
+                    this.updatePreview();
+                    this.showThinking('✅ Code generation complete!');
                     
                 } catch (error) {
-                    console.error('Error in iteration:', error);
-                    addThinkingBubble(`Error in iteration ${currentIteration}`, `Error: ${error.message}`);
-                    showNotification(`Error in iteration ${currentIteration}: ${error.message}`, 'error');
+                    console.error('Error generating code:', error);
+                    this.showThinking(`❌ Error: ${error.message}`);
+                    this.displayCode('// Error generating code. Please check your API key and try again.');
+                } finally {
+                    this.setGeneratingState(false);
                 }
             }
-            
-            updateProcessStatus('Super Agent completed successfully!');
-            document.getElementById('downloadCodeBtn').classList.remove('hidden');
-            document.getElementById('fullscreenBtn').classList.remove('hidden');
-            showNotification('Code generation completed!', 'success');
-        }
-        
-        async function callOpenAI(prompt) {
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
-                },
-                body: JSON.stringify({
-                    model: 'gpt-4',
-                    messages: [
-                        {
-                            role: 'system',
-                            content: 'You are an expert web developer. Always provide complete, working HTML files with embedded CSS and JavaScript. Respond with the thinking process and the complete code.'
-                        },
-                        {
-                            role: 'user',
-                            content: prompt
-                        }
-                    ],
-                    temperature: 0.7,
-                    max_tokens: 4000
-                })
-            });
-            
-            if (!response.ok) {
-                throw new Error(`OpenAI API error: ${response.status}`);
+
+            setGeneratingState(generating) {
+                this.isGenerating = generating;
+                this.generateBtn.disabled = generating;
+                if (generating) {
+                    this.generateBtnText.innerHTML = '<span class="loading-dots">Generating</span>';
+                } else {
+                    this.generateBtnText.textContent = 'Generate Code';
+                }
             }
-            
-            const data = await response.json();
-            const content = data.choices[0].message.content;
-            
-            // Extract code from response
-            const codeMatch = content.match(/```html\n([\s\S]*?)\n```/) || content.match(/```\n([\s\S]*?)\n```/);
-            const code = codeMatch ? codeMatch[1] : content;
-            
-            return {
-                thinking: content.split('```')[0].trim(),
-                code: code.trim()
-            };
-        }
-        
-        function updateProcessStatus(message) {
-            const statusDiv = document.getElementById('processStatus');
-            statusDiv.innerHTML = `
-                <div class="flex items-center justify-center">
-                    <div class="loading-dots mr-4">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
+
+            showThinking(message) {
+                const timestamp = new Date().toLocaleTimeString();
+                const thinkingHTML = `
+                    <div class="mb-2 text-sm">
+                        <span class="text-gray-500">[${timestamp}]</span>
+                        <span class="text-gray-200">${message}</span>
                     </div>
-                    <span>${message}</span>
-                </div>
-            `;
-        }
-        
-        function addThinkingBubble(title, content) {
-            const thinkingDiv = document.getElementById('thinkingProcess');
-            const bubble = document.createElement('div');
-            bubble.className = 'thinking-bubble p-4 rounded-lg mb-4';
-            bubble.innerHTML = `
-                <div class="flex items-center mb-2">
-                    <span class="iteration-badge mr-2">${title}</span>
-                    <i class="fas fa-lightbulb text-yellow-400"></i>
-                </div>
-                <p class="text-gray-300 text-sm leading-relaxed">${content}</p>
-            `;
-            thinkingDiv.appendChild(bubble);
-            thinkingDiv.scrollTop = thinkingDiv.scrollHeight;
-        }
-        
-        function updateCodeOutput(code) {
-            const codeDiv = document.getElementById('codeOutput');
-            codeDiv.innerHTML = `<pre class="text-sm text-gray-300 whitespace-pre-wrap">${escapeHtml(code)}</pre>`;
-        }
-        
-        function updatePreview(code) {
-            const previewDiv = document.getElementById('previewContainer');
-            
-            // Create iframe for safe preview
-            const iframe = document.createElement('iframe');
-            iframe.style.width = '100%';
-            iframe.style.height = '400px';
-            iframe.style.border = 'none';
-            iframe.style.borderRadius = '8px';
-            
-            previewDiv.innerHTML = '';
-            previewDiv.appendChild(iframe);
-            
-            // Write code to iframe
-            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-            iframeDoc.open();
-            iframeDoc.write(code);
-            iframeDoc.close();
-        }
-        
-        function enterFullscreen() {
-            const modal = document.getElementById('fullscreenModal');
-            const content = document.getElementById('fullscreenContent');
-            
-            // Create fullscreen iframe
-            const iframe = document.createElement('iframe');
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            iframe.style.border = 'none';
-            
-            content.innerHTML = '';
-            content.appendChild(iframe);
-            
-            // Write code to iframe
-            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-            iframeDoc.open();
-            iframeDoc.write(generatedCode);
-            iframeDoc.close();
-            
-            modal.classList.remove('hidden');
-            modal.classList.add('block');
-            
-            // Try to enter browser fullscreen
-            if (modal.requestFullscreen) {
-                modal.requestFullscreen();
-            } else if (modal.webkitRequestFullscreen) {
-                modal.webkitRequestFullscreen();
-            } else if (modal.msRequestFullscreen) {
-                modal.msRequestFullscreen();
+                `;
+                this.thinkingArea.insertAdjacentHTML('beforeend', thinkingHTML);
+                this.thinkingArea.scrollTop = this.thinkingArea.scrollHeight;
+            }
+
+            displayCode(code) {
+                this.codeOutput.innerHTML = `<pre class="text-sm text-gray-100 whitespace-pre-wrap">${this.escapeHtml(code)}</pre>`;
+                this.copyCodeBtn.style.display = 'block';
+            }
+
+            copyCode() {
+                navigator.clipboard.writeText(this.currentCode).then(() => {
+                    const originalText = this.copyCodeBtn.textContent;
+                    this.copyCodeBtn.textContent = 'Copied!';
+                    this.copyCodeBtn.className = this.copyCodeBtn.className.replace('bg-gray-600 hover:bg-gray-700', 'bg-green-600');
+                    setTimeout(() => {
+                        this.copyCodeBtn.textContent = originalText;
+                        this.copyCodeBtn.className = this.copyCodeBtn.className.replace('bg-green-600', 'bg-gray-600 hover:bg-gray-700');
+                    }, 2000);
+                });
+            }
+
+            updatePreview() {
+                if (!this.currentCode) return;
+
+                // Check if code contains HTML
+                if (this.currentCode.includes('<html') || this.currentCode.includes('<!DOCTYPE')) {
+                    // Full HTML document
+                    const iframe = document.createElement('iframe');
+                    iframe.className = 'preview-frame';
+                    iframe.srcdoc = this.currentCode;
+                    
+                    this.previewContainer.innerHTML = '';
+                    this.previewContainer.appendChild(iframe);
+                    this.refreshPreview.style.display = 'block';
+                } else if (this.currentCode.includes('<') && this.currentCode.includes('>')) {
+                    // HTML snippet - wrap in basic document
+                    const fullHTML = `
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <style>
+                                body { margin: 0; padding: 20px; font-family: system-ui, -apple-system, sans-serif; }
+                            </style>
+                        </head>
+                        <body>
+                            ${this.currentCode}
+                        </body>
+                        </html>
+                    `;
+                    
+                    const iframe = document.createElement('iframe');
+                    iframe.className = 'preview-frame';
+                    iframe.srcdoc = fullHTML;
+                    
+                    this.previewContainer.innerHTML = '';
+                    this.previewContainer.appendChild(iframe);
+                    this.refreshPreview.style.display = 'block';
+                } else {
+                    // Non-HTML code - show as formatted text
+                    this.previewContainer.innerHTML = `
+                        <div class="h-full p-4 overflow-auto bg-gray-50">
+                            <pre class="text-sm text-gray-800 font-mono">${this.escapeHtml(this.currentCode)}</pre>
+                        </div>
+                    `;
+                    this.refreshPreview.style.display = 'block';
+                }
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
             }
         }
-        
-        function exitFullscreen() {
-            const modal = document.getElementById('fullscreenModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('block');
-            
-            // Exit browser fullscreen
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            }
-        }
-        
-        function downloadCode() {
-            if (!generatedCode) {
-                showNotification('No code to download', 'error');
-                return;
-            }
-            
-            const blob = new Blob([generatedCode], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'generated-code.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showNotification('Code downloaded successfully!', 'success');
-        }
-        
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-medium z-50 ${
-                type === 'success' ? 'bg-green-600' :
-                type === 'error' ? 'bg-red-600' :
-                type === 'warning' ? 'bg-yellow-600' :
-                'bg-blue-600'
-            }`;
-            notification.textContent = message;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-        
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            new CodeAssistant();
+        });
     </script>
 </body>
 </html>
