@@ -3,219 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Code Assistant - Professional Development Tool</title>
+    <title>Code Super Agent - Genspark Style</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
     <style>
         * {
             font-family: 'Inter', sans-serif;
         }
         
         body {
-            background: #0f0f23;
+            background: #0a0a0a;
             color: #ffffff;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            overflow: hidden;
         }
         
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #1a1a2e;
-        }
-        
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #16213e;
-            border-radius: 4px;
-        }
-        
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #0f3460;
-        }
-        
-        .tab-active {
+        .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            box-shadow: 0 4px 15px 0 rgba(102, 126, 234, 0.4);
-            color: white;
         }
         
-        .tab-inactive {
-            background: #1a1a2e;
-            border: 1px solid #16213e;
-            color: #9ca3af;
+        .card-dark {
+            background: #1a1a1a;
+            border: 1px solid #2d2d2d;
         }
         
-        .tab-inactive:hover {
-            background: #16213e;
-            border-color: #0f3460;
-            color: white;
+        .card-darker {
+            background: #0f0f0f;
+            border: 1px solid #2d2d2d;
         }
         
-        .lang-active {
+        .glow-effect {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .thinking-bubble {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-left: 4px solid #667eea;
+        }
+        
+        .iteration-badge {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
         
-        .lang-inactive {
-            background: #1a1a2e;
-            border: 1px solid #16213e;
-            color: #9ca3af;
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 4px;
+            border-radius: 2px;
+            transition: width 0.3s ease;
         }
         
-        .lang-inactive:hover {
-            background: #16213e;
-            border-color: #0f3460;
-            color: white;
-        }
-        
-        .project-item {
-            background: #1a1a2e;
-            border: 1px solid #16213e;
-            transition: all 0.3s ease;
-        }
-        
-        .project-item:hover {
-            background: #16213e;
-            border-color: #0f3460;
-            transform: translateY(-1px);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            box-shadow: 0 4px 15px 0 rgba(102, 126, 234, 0.4);
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            box-shadow: 0 6px 20px 0 rgba(102, 126, 234, 0.6);
-            transform: translateY(-1px);
-        }
-        
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .btn-secondary {
-            background: #1a1a2e;
-            border: 1px solid #16213e;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-secondary:hover {
-            background: #16213e;
-            border-color: #0f3460;
-        }
-        
-        .btn-danger {
-            background: #dc2626;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-danger:hover {
-            background: #b91c1c;
-        }
-        
-        .input-field {
-            background: #1a1a2e;
-            border: 1px solid #16213e;
-            color: #ffffff;
-            transition: all 0.3s ease;
-        }
-        
-        .input-field:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-            outline: none;
-        }
-        
-        .editor-container {
-            height: 500px;
-            min-height: 500px;
-            border: 1px solid #16213e;
-            border-radius: 8px;
-            overflow: hidden;
+        .code-editor {
             background: #1e1e1e;
-        }
-        
-        #editor {
-            width: 100%;
-            height: 100%;
-            min-height: 500px;
-        }
-        
-        .live-preview-area {
-            background: white;
-            border: 1px solid #16213e;
+            border: 1px solid #2d2d2d;
             border-radius: 8px;
-            height: 500px;
+            min-height: 400px;
+        }
+        
+        .preview-area {
+            background: #ffffff;
+            border: 1px solid #2d2d2d;
+            border-radius: 8px;
+            min-height: 400px;
             overflow: auto;
-            padding: 20px;
-            color: #333;
-        }
-        
-        .thinking-area {
-            background: #1a1a2e;
-            border: 1px solid #16213e;
-            border-radius: 8px;
-            padding: 20px;
-            height: 500px;
-            overflow-y: auto;
-            color: #e5e7eb;
-        }
-        
-        .sidebar {
-            background: #16213e;
-            border-right: 1px solid #0f3460;
-            width: 320px;
-            flex-shrink: 0;
-        }
-        
-        .main-content {
-            background: #0f0f23;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-        
-        .tab-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            min-height: 0;
-        }
-        
-        .tab-pane {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            min-height: 0;
-        }
-        
-        .tab-pane.hidden {
-            display: none;
         }
         
         .loading-spinner {
-            border: 2px solid #1a1a2e;
+            border: 2px solid #2d2d2d;
             border-top: 2px solid #667eea;
             border-radius: 50%;
             width: 20px;
@@ -229,1276 +86,647 @@
         }
         
         .fade-in {
-            animation: fadeIn 0.3s ease-in;
+            animation: fadeIn 0.5s ease-in;
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .api-key-status {
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 500;
+        .pulse-animation {
+            animation: pulse 2s infinite;
         }
         
-        .api-key-configured {
-            background: #065f46;
-            color: #34d399;
-            border: 1px solid #059669;
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
         }
         
-        .api-key-missing {
-            background: #7c2d12;
-            color: #fb7185;
-            border: 1px solid #dc2626;
-        }
-        
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 500;
-            z-index: 1000;
-            animation: slideIn 0.3s ease-out;
-        }
-        
-        .toast.success {
-            background: #059669;
-        }
-        
-        .toast.error {
-            background: #dc2626;
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        .modal-overlay {
-            position: fixed;
+        .timeline-line {
+            position: absolute;
+            left: 1rem;
             top: 0;
-            left: 0;
-            right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
+            width: 2px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
         }
         
-        .modal-content {
-            background: #1a1a2e;
-            border: 1px solid #16213e;
-            border-radius: 12px;
-            padding: 24px;
-            max-width: 500px;
-            width: 90%;
-            margin: 20px;
+        .timeline-dot {
+            position: absolute;
+            left: 0.75rem;
+            width: 0.5rem;
+            height: 0.5rem;
+            background: #667eea;
+            border-radius: 50%;
         }
         
-        .app-container {
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
         }
         
-        .bottom-section {
-            background: #0f0f23;
-            border-top: 1px solid #16213e;
-            padding: 20px;
-            flex-shrink: 0;
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2d2d2d;
+            border-radius: 4px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #4a4a4a;
         }
     </style>
 </head>
-<body>
-    <div class="app-container">
-        <!-- Sidebar -->
-        <div class="sidebar p-6 overflow-y-auto custom-scrollbar">
-            <div class="mb-8">
-                <h1 class="text-2xl font-bold mb-2 text-white">
-                    <i class="fas fa-code mr-2 text-purple-400"></i>
-                    AI Code Assistant
-                </h1>
-                <p class="text-gray-400 text-sm">Professional Development Tool</p>
-            </div>
-            
-            <!-- API Key Configuration -->
-            <div class="mb-6">
-                <div class="flex items-center justify-between mb-2">
-                    <label class="text-sm font-medium text-gray-300">API Configuration</label>
-                    <div id="apiKeyStatus" class="api-key-status api-key-missing">
-                        <i class="fas fa-times mr-1"></i>
-                        Not Configured
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <input 
-                        type="password" 
-                        id="apiKeyInput" 
-                        class="input-field w-full px-3 py-2 rounded-lg text-sm" 
-                        placeholder="Enter OpenAI API Key (sk-...)"
-                    >
-                    <button id="saveApiKeyBtn" class="btn-primary w-full px-3 py-2 rounded-lg text-sm font-medium">
-                        <i class="fas fa-save mr-1"></i>
-                        Save API Key
-                    </button>
-                </div>
-                <div class="mt-2 p-2 bg-yellow-900 bg-opacity-30 border border-yellow-600 rounded-lg">
-                    <p class="text-yellow-300 text-xs">
-                        <i class="fas fa-shield-alt mr-1"></i>
-                        API keys are stored locally in your browser
-                    </p>
-                </div>
-            </div>
-            
-            <!-- AI Model Selection -->
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-300 mb-2">AI Model</label>
-                <select id="aiModel" class="input-field w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
-                    <option value="gpt-4">GPT-4</option>
-                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                </select>
-            </div>
-            
-            <!-- New Project Button -->
-            <button id="newProjectBtn" class="btn-primary w-full px-4 py-3 rounded-lg text-white font-medium transition-all duration-300 mb-6">
-                <i class="fas fa-plus mr-2"></i>
-                New Project
-            </button>
-            
-            <!-- Saved Projects -->
-            <div class="mb-6">
-                <h2 class="text-lg font-semibold text-white mb-4">
-                    <i class="fas fa-folder mr-2 text-blue-400"></i>
-                    Saved Projects
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-2">
+                <i class="fas fa-robot mr-3 text-purple-400"></i>
+                Code Super Agent
+            </h1>
+            <p class="text-gray-400 text-lg">Genspark-Style Iterative Code Generation</p>
+        </div>
+        
+        <!-- API Key Configuration -->
+        <div class="card-dark rounded-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold">
+                    <i class="fas fa-key mr-2 text-yellow-400"></i>
+                    API Configuration
                 </h2>
-                <div id="projectsList" class="space-y-2">
-                    <!-- Projects will be loaded here -->
-                </div>
+                <span id="apiStatus" class="text-sm text-red-400">
+                    <i class="fas fa-times-circle mr-1"></i>
+                    Not Configured
+                </span>
             </div>
-            
-            <!-- Project Actions -->
-            <div class="space-y-2">
-                <button id="saveProjectBtn" class="btn-secondary w-full px-4 py-2 rounded-lg text-white font-medium transition-all duration-300">
-                    <i class="fas fa-save mr-2"></i>
-                    Save Current Project
-                </button>
-                <button id="exportProjectBtn" class="btn-secondary w-full px-4 py-2 rounded-lg text-white font-medium transition-all duration-300">
-                    <i class="fas fa-download mr-2"></i>
-                    Export Project
+            <div class="flex space-x-4">
+                <input 
+                    type="password" 
+                    id="apiKeyInput" 
+                    placeholder="Enter your OpenAI API key (sk-...)" 
+                    class="flex-1 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg focus:outline-none focus:border-purple-500 text-white"
+                >
+                <button 
+                    id="saveApiKeyBtn" 
+                    class="gradient-bg px-6 py-2 rounded-lg font-medium hover:opacity-80 transition-opacity"
+                >
+                    Save Key
                 </button>
             </div>
         </div>
         
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Top Section - Tabs and Content -->
-            <div class="flex-1 p-6 min-h-0">
-                <!-- Tab Navigation -->
-                <div class="flex space-x-2 mb-6">
-                    <button id="thinkingTab" class="tab-active px-6 py-3 rounded-lg font-medium transition-all duration-300">
-                        <i class="fas fa-brain mr-2"></i>
-                        Thinking
-                    </button>
-                    <button id="codeTab" class="tab-inactive px-6 py-3 rounded-lg font-medium transition-all duration-300">
-                        <i class="fas fa-code mr-2"></i>
-                        Code
-                    </button>
-                    <button id="previewTab" class="tab-inactive px-6 py-3 rounded-lg font-medium transition-all duration-300">
-                        <i class="fas fa-eye mr-2"></i>
-                        Live Preview
-                    </button>
+        <!-- Main Interface -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left Column - Input & Process -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Input Section -->
+                <div class="card-dark rounded-lg p-6">
+                    <h2 class="text-xl font-semibold mb-4">
+                        <i class="fas fa-terminal mr-2 text-green-400"></i>
+                        Project Description
+                    </h2>
+                    <textarea 
+                        id="projectInput" 
+                        placeholder="Describe your coding project in detail... (e.g., 'Create a responsive todo app with drag-and-drop functionality, local storage, and smooth animations')"
+                        class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg focus:outline-none focus:border-purple-500 text-white resize-none"
+                        rows="4"
+                    ></textarea>
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex items-center space-x-4">
+                            <label class="text-sm text-gray-400">Max Iterations:</label>
+                            <select id="maxIterations" class="px-3 py-1 bg-gray-800 border border-gray-600 rounded text-white">
+                                <option value="3">3 iterations</option>
+                                <option value="5" selected>5 iterations</option>
+                                <option value="7">7 iterations</option>
+                            </select>
+                        </div>
+                        <button 
+                            id="startAgentBtn" 
+                            class="gradient-bg px-6 py-2 rounded-lg font-medium hover:opacity-80 transition-opacity glow-effect"
+                        >
+                            <i class="fas fa-rocket mr-2"></i>
+                            Start Super Agent
+                        </button>
+                    </div>
                 </div>
                 
-                <!-- Tab Content -->
-                <div class="tab-content">
-                    <!-- Thinking Tab -->
-                    <div id="thinkingContent" class="tab-pane">
-                        <div class="thinking-area custom-scrollbar">
-                            <div id="thinkingText" class="leading-relaxed">
-                                <div class="text-center text-gray-500 mt-20">
-                                    <i class="fas fa-lightbulb text-4xl mb-4"></i>
-                                    <p class="text-lg">AI thoughts and explanations will appear here...</p>
-                                    <p class="text-sm mt-2">Enter a prompt below to get started!</p>
-                                </div>
+                <!-- Process Timeline -->
+                <div class="card-dark rounded-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-semibold">
+                            <i class="fas fa-brain mr-2 text-blue-400"></i>
+                            AI Thinking Process
+                        </h2>
+                        <div id="progressContainer" class="flex items-center space-x-2 hidden">
+                            <span id="currentIteration" class="text-sm text-gray-400">0/0</span>
+                            <div class="w-32 bg-gray-700 rounded-full h-2">
+                                <div id="progressBar" class="progress-bar w-0 h-2 rounded-full"></div>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Code Tab -->
-                    <div id="codeContent" class="tab-pane hidden">
-                        <div class="mb-4 flex space-x-2">
-                            <button id="htmlBtn" class="lang-active px-4 py-2 rounded-lg font-medium transition-all duration-300">
-                                <i class="fab fa-html5 mr-1"></i>
-                                HTML
-                            </button>
-                            <button id="cssBtn" class="lang-inactive px-4 py-2 rounded-lg font-medium transition-all duration-300">
-                                <i class="fab fa-css3-alt mr-1"></i>
-                                CSS
-                            </button>
-                            <button id="jsBtn" class="lang-inactive px-4 py-2 rounded-lg font-medium transition-all duration-300">
-                                <i class="fab fa-js mr-1"></i>
-                                JavaScript
-                            </button>
-                        </div>
-                        <div class="editor-container">
-                            <div id="editor"></div>
+                    <div id="thinkingProcess" class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar">
+                        <div class="text-center text-gray-500 py-8">
+                            <i class="fas fa-lightbulb text-4xl mb-4"></i>
+                            <p>AI thinking process will appear here...</p>
                         </div>
                     </div>
-                    
-                    <!-- Preview Tab -->
-                    <div id="previewContent" class="tab-pane hidden">
-                        <div class="flex-1">
-                            <div id="livePreview" class="live-preview-area custom-scrollbar">
-                                <div class="text-center text-gray-500 mt-20">
-                                    <i class="fas fa-desktop text-4xl mb-4"></i>
-                                    <p class="text-lg">Live preview will appear here...</p>
-                                    <p class="text-sm mt-2">Generate some code to see the result!</p>
-                                </div>
-                            </div>
+                </div>
+                
+                <!-- Code Result -->
+                <div class="card-dark rounded-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-semibold">
+                            <i class="fas fa-code mr-2 text-purple-400"></i>
+                            Generated Code
+                        </h2>
+                        <div class="flex space-x-2">
+                            <button id="copyCodeBtn" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
+                                <i class="fas fa-copy mr-2"></i>
+                                Copy Code
+                            </button>
+                            <button id="downloadCodeBtn" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
+                                <i class="fas fa-download mr-2"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                    <div id="codeResult" class="code-editor p-4 text-sm font-mono custom-scrollbar">
+                        <div class="text-center text-gray-500 py-8">
+                            <i class="fas fa-file-code text-4xl mb-4"></i>
+                            <p>Generated code will appear here...</p>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Bottom Section - Prompt Input -->
-            <div class="bottom-section">
-                <div class="flex space-x-4">
-                    <div class="flex-1">
-                        <textarea 
-                            id="promptInput" 
-                            class="input-field w-full px-4 py-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-purple-500" 
-                            rows="3" 
-                            placeholder="Describe what you want to build, add, fix, or change... (e.g., 'Create a login form with email and password fields')"
-                        ></textarea>
+            <!-- Right Column - Preview & Timeline -->
+            <div class="space-y-6">
+                <!-- Live Preview -->
+                <div class="card-dark rounded-lg p-6">
+                    <h2 class="text-xl font-semibold mb-4">
+                        <i class="fas fa-eye mr-2 text-pink-400"></i>
+                        Live Preview
+                    </h2>
+                    <div id="livePreview" class="preview-area p-4">
+                        <div class="text-center text-gray-500 py-8">
+                            <i class="fas fa-desktop text-4xl mb-4"></i>
+                            <p>Live preview will appear here...</p>
+                        </div>
                     </div>
-                    <div class="flex flex-col space-y-2">
-                        <button id="generateBtn" class="btn-primary px-6 py-3 rounded-lg text-white font-medium transition-all duration-300 flex items-center">
-                            <i class="fas fa-magic mr-2"></i>
-                            Generate
-                        </button>
-                        <button id="updateBtn" class="btn-secondary px-6 py-3 rounded-lg text-white font-medium transition-all duration-300 flex items-center">
-                            <i class="fas fa-sync mr-2"></i>
-                            Update
-                        </button>
+                </div>
+                
+                <!-- Iteration Timeline -->
+                <div class="card-dark rounded-lg p-6">
+                    <h2 class="text-xl font-semibold mb-4">
+                        <i class="fas fa-history mr-2 text-orange-400"></i>
+                        Iteration Timeline
+                    </h2>
+                    <div id="iterationTimeline" class="relative pl-8 space-y-4 max-h-64 overflow-y-auto custom-scrollbar">
+                        <div class="text-center text-gray-500 py-4">
+                            <i class="fas fa-clock text-2xl mb-2"></i>
+                            <p class="text-sm">Timeline will appear here...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Statistics -->
+                <div class="card-dark rounded-lg p-6">
+                    <h2 class="text-xl font-semibold mb-4">
+                        <i class="fas fa-chart-bar mr-2 text-cyan-400"></i>
+                        Session Stats
+                    </h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center">
+                            <div id="totalIterations" class="text-2xl font-bold text-purple-400">0</div>
+                            <div class="text-sm text-gray-400">Iterations</div>
+                        </div>
+                        <div class="text-center">
+                            <div id="codeLines" class="text-2xl font-bold text-green-400">0</div>
+                            <div class="text-sm text-gray-400">Lines of Code</div>
+                        </div>
+                        <div class="text-center">
+                            <div id="processingTime" class="text-2xl font-bold text-blue-400">0s</div>
+                            <div class="text-sm text-gray-400">Processing Time</div>
+                        </div>
+                        <div class="text-center">
+                            <div id="improvements" class="text-2xl font-bold text-yellow-400">0</div>
+                            <div class="text-sm text-gray-400">Improvements</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Project Name Modal -->
-    <div id="projectNameModal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <h3 class="text-lg font-semibold text-white mb-4">
-                <i class="fas fa-save mr-2"></i>
-                Save Project
-            </h3>
-            <input 
-                id="projectNameInput" 
-                type="text" 
-                class="input-field w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 mb-4" 
-                placeholder="Enter project name..."
-            >
-            <div class="flex space-x-3">
-                <button id="saveConfirmBtn" class="btn-primary flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all duration-300">
-                    <i class="fas fa-check mr-2"></i>
-                    Save
-                </button>
-                <button id="saveCancelBtn" class="btn-secondary flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all duration-300">
-                    <i class="fas fa-times mr-2"></i>
-                    Cancel
-                </button>
-            </div>
-        </div>
-    </div>
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
 
-    <!-- Monaco Editor -->
-    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.js"></script>
-    
     <script>
         // Global variables
-        let editor = null;
+        let apiKey = '';
         let currentProject = {
-            id: null,
-            name: 'Untitled Project',
-            html: '<!DOCTYPE html>\n<html>\n<head>\n    <title>My Project</title>\n</head>\n<body>\n    <h1>Hello World!</h1>\n</body>\n</html>',
-            css: 'body {\n    font-family: Arial, sans-serif;\n    margin: 0;\n    padding: 20px;\n    background-color: #f0f0f0;\n}\n\nh1 {\n    color: #333;\n    text-align: center;\n}',
-            js: '// Your JavaScript code here\nconsole.log("Hello World!");'
+            html: '',
+            css: '',
+            js: '',
+            description: ''
         };
-        let currentLanguage = 'html';
-        let currentTab = 'thinking';
-        let isGenerating = false;
+        let iterationCount = 0;
+        let maxIterations = 5;
+        let startTime = 0;
+        let isProcessing = false;
         
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, initializing app...');
-            
-            // Initialize components
-            initializeMonacoEditor();
-            loadApiKeyStatus();
-            loadProjects();
+            loadApiKey();
             setupEventListeners();
-            updatePreview();
-            
-            console.log('App initialized successfully');
         });
-        
-        // Initialize Monaco Editor
-        function initializeMonacoEditor() {
-            console.log('Initializing Monaco Editor...');
-            
-            require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs' }});
-            require(['vs/editor/editor.main'], function () {
-                try {
-                    editor = monaco.editor.create(document.getElementById('editor'), {
-                        value: currentProject.html,
-                        language: 'html',
-                        theme: 'vs-dark',
-                        automaticLayout: true,
-                        fontSize: 14,
-                        lineNumbers: 'on',
-                        roundedSelection: false,
-                        scrollBeyondLastLine: false,
-                        readOnly: false,
-                        minimap: { enabled: true },
-                        wordWrap: 'on',
-                        width: '100%',
-                        height: '100%'
-                    });
-                    
-                    // Auto-save changes
-                    editor.onDidChangeModelContent(() => {
-                        const content = editor.getValue();
-                        currentProject[currentLanguage] = content;
-                        if (currentTab === 'preview') {
-                            updatePreview();
-                        }
-                    });
-                    
-                    // Ensure proper layout after initialization
-                    setTimeout(() => {
-                        if (editor) {
-                            editor.layout();
-                        }
-                    }, 100);
-                    
-                    console.log('Monaco Editor initialized successfully');
-                } catch (error) {
-                    console.error('Monaco Editor initialization failed:', error);
-                }
-            });
-        }
         
         // Setup event listeners
         function setupEventListeners() {
-            console.log('Setting up event listeners...');
+            document.getElementById('saveApiKeyBtn').addEventListener('click', saveApiKey);
+            document.getElementById('startAgentBtn').addEventListener('click', startSuperAgent);
+            document.getElementById('copyCodeBtn').addEventListener('click', copyCode);
+            document.getElementById('downloadCodeBtn').addEventListener('click', downloadCode);
             
-            // Tab switching
-            const thinkingTab = document.getElementById('thinkingTab');
-            const codeTab = document.getElementById('codeTab');
-            const previewTab = document.getElementById('previewTab');
-            
-            if (thinkingTab) thinkingTab.addEventListener('click', () => switchTab('thinking'));
-            if (codeTab) codeTab.addEventListener('click', () => switchTab('code'));
-            if (previewTab) previewTab.addEventListener('click', () => switchTab('preview'));
-            
-            // Code language switching
-            const htmlBtn = document.getElementById('htmlBtn');
-            const cssBtn = document.getElementById('cssBtn');
-            const jsBtn = document.getElementById('jsBtn');
-            
-            if (htmlBtn) htmlBtn.addEventListener('click', () => switchLanguage('html'));
-            if (cssBtn) cssBtn.addEventListener('click', () => switchLanguage('css'));
-            if (jsBtn) jsBtn.addEventListener('click', () => switchLanguage('js'));
-            
-            // API Key management
-            const saveApiKeyBtn = document.getElementById('saveApiKeyBtn');
-            if (saveApiKeyBtn) saveApiKeyBtn.addEventListener('click', saveApiKey);
-            
-            // Project management
-            const newProjectBtn = document.getElementById('newProjectBtn');
-            const saveProjectBtn = document.getElementById('saveProjectBtn');
-            const exportProjectBtn = document.getElementById('exportProjectBtn');
-            
-            if (newProjectBtn) newProjectBtn.addEventListener('click', newProject);
-            if (saveProjectBtn) saveProjectBtn.addEventListener('click', showSaveModal);
-            if (exportProjectBtn) exportProjectBtn.addEventListener('click', exportProject);
-            
-            // AI Generation
-            const generateBtn = document.getElementById('generateBtn');
-            const updateBtn = document.getElementById('updateBtn');
-            
-            if (generateBtn) generateBtn.addEventListener('click', generateCode);
-            if (updateBtn) updateBtn.addEventListener('click', updateCode);
-            
-            // Modal handlers
-            const saveConfirmBtn = document.getElementById('saveConfirmBtn');
-            const saveCancelBtn = document.getElementById('saveCancelBtn');
-            const projectNameInput = document.getElementById('projectNameInput');
-            
-            if (saveConfirmBtn) saveConfirmBtn.addEventListener('click', confirmSaveProject);
-            if (saveCancelBtn) saveCancelBtn.addEventListener('click', hideSaveModal);
-            if (projectNameInput) {
-                projectNameInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') confirmSaveProject();
-                });
-            }
-            
-            // Prompt input
-            const promptInput = document.getElementById('promptInput');
-            if (promptInput) {
-                promptInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && e.ctrlKey) {
-                        e.preventDefault();
-                        generateCode();
-                    }
-                });
-            }
-            
-            console.log('Event listeners setup complete');
+            // Enter key support
+            document.getElementById('projectInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && e.ctrlKey) {
+                    startSuperAgent();
+                }
+            });
         }
         
         // API Key Management
         function saveApiKey() {
-            const apiKeyInput = document.getElementById('apiKeyInput');
-            const apiKey = apiKeyInput.value.trim();
+            const keyInput = document.getElementById('apiKeyInput');
+            const key = keyInput.value.trim();
             
-            if (!apiKey) {
-                showToast('Please enter an API key', 'error');
+            if (!key.startsWith('sk-')) {
+                showToast('Please enter a valid OpenAI API key', 'error');
                 return;
             }
             
-            if (!apiKey.startsWith('sk-')) {
-                showToast('Please enter a valid OpenAI API key (starts with sk-)', 'error');
-                return;
-            }
-            
-            // Save to localStorage
-            localStorage.setItem('openai_api_key', apiKey);
+            apiKey = key;
+            localStorage.setItem('openai_api_key', key);
             
             // Update UI
-            updateApiKeyStatus(true);
-            apiKeyInput.value = '';
+            document.getElementById('apiStatus').innerHTML = '<i class="fas fa-check-circle mr-1"></i>Configured';
+            document.getElementById('apiStatus').className = 'text-sm text-green-400';
             
             showToast('API key saved successfully!', 'success');
+            keyInput.value = '';
         }
         
-        function loadApiKeyStatus() {
-            const apiKey = localStorage.getItem('openai_api_key');
-            updateApiKeyStatus(!!apiKey);
-        }
-        
-        function updateApiKeyStatus(isConfigured) {
-            const statusElement = document.getElementById('apiKeyStatus');
-            if (statusElement) {
-                if (isConfigured) {
-                    statusElement.className = 'api-key-status api-key-configured';
-                    statusElement.innerHTML = '<i class="fas fa-check mr-1"></i>Configured';
-                } else {
-                    statusElement.className = 'api-key-status api-key-missing';
-                    statusElement.innerHTML = '<i class="fas fa-times mr-1"></i>Not Configured';
-                }
+        function loadApiKey() {
+            const savedKey = localStorage.getItem('openai_api_key');
+            if (savedKey) {
+                apiKey = savedKey;
+                document.getElementById('apiStatus').innerHTML = '<i class="fas fa-check-circle mr-1"></i>Configured';
+                document.getElementById('apiStatus').className = 'text-sm text-green-400';
             }
         }
         
-        // Tab switching functionality
-        function switchTab(tabName) {
-            console.log('Switching to tab:', tabName);
-            
-            // Update tab buttons
-            const tabs = ['thinking', 'code', 'preview'];
-            tabs.forEach(tab => {
-                const tabButton = document.getElementById(`${tab}Tab`);
-                if (tabButton) {
-                    if (tab === tabName) {
-                        tabButton.className = 'tab-active px-6 py-3 rounded-lg font-medium transition-all duration-300';
-                    } else {
-                        tabButton.className = 'tab-inactive px-6 py-3 rounded-lg font-medium transition-all duration-300';
-                    }
-                }
-            });
-            
-            // Update tab content
-            tabs.forEach(tab => {
-                const tabContent = document.getElementById(`${tab}Content`);
-                if (tabContent) {
-                    if (tab === tabName) {
-                        tabContent.classList.remove('hidden');
-                    } else {
-                        tabContent.classList.add('hidden');
-                    }
-                }
-            });
-            
-            currentTab = tabName;
-            
-            // Handle Monaco Editor layout when switching to code tab
-            if (tabName === 'code' && editor) {
-                setTimeout(() => {
-                    editor.layout();
-                }, 100);
+        // Super Agent Main Function
+        async function startSuperAgent() {
+            if (!apiKey) {
+                showToast('Please configure your API key first', 'error');
+                return;
             }
             
-            // Update preview when switching to preview tab
-            if (tabName === 'preview') {
+            const projectDescription = document.getElementById('projectInput').value.trim();
+            if (!projectDescription) {
+                showToast('Please describe your project first', 'error');
+                return;
+            }
+            
+            if (isProcessing) {
+                showToast('Super Agent is already running', 'warning');
+                return;
+            }
+            
+            // Initialize
+            isProcessing = true;
+            iterationCount = 0;
+            maxIterations = parseInt(document.getElementById('maxIterations').value);
+            startTime = Date.now();
+            
+            // Reset UI
+            resetUI();
+            showProgress();
+            
+            // Start the iterative process
+            await runIterativeProcess(projectDescription);
+            
+            isProcessing = false;
+        }
+        
+        // Iterative Process
+        async function runIterativeProcess(description) {
+            currentProject.description = description;
+            
+            addThinkingStep('🚀 Starting Super Agent...', 'Initializing iterative code generation process');
+            addTimelineItem('Process Started', 'Analyzing project requirements');
+            
+            for (let i = 1; i <= maxIterations; i++) {
+                iterationCount = i;
+                updateProgress();
+                
+                try {
+                    await runIteration(i, description);
+                    await new Promise(resolve => setTimeout(resolve, 1000)); // Brief pause between iterations
+                } catch (error) {
+                    addThinkingStep(`❌ Error in iteration ${i}`, error.message);
+                    break;
+                }
+            }
+            
+            // Final summary
+            const processingTime = Math.round((Date.now() - startTime) / 1000);
+            addThinkingStep('✅ Super Agent Complete!', `Generated optimized code in ${iterationCount} iterations (${processingTime}s)`);
+            addTimelineItem('Process Complete', `Final code generated with ${iterationCount} iterations`);
+            
+            updateStats();
+            hideProgress();
+        }
+        
+        // Individual Iteration
+        async function runIteration(iteration, description) {
+            const iterationPrompt = generateIterationPrompt(iteration, description);
+            
+            addThinkingStep(`🔄 Iteration ${iteration}/${maxIterations}`, `${getIterationGoal(iteration)}`);
+            addTimelineItem(`Iteration ${iteration}`, getIterationGoal(iteration));
+            
+            try {
+                const response = await callOpenAI(iterationPrompt);
+                processIterationResponse(response, iteration);
+                
+                // Update preview
                 updatePreview();
+                
+                addThinkingStep(`✅ Iteration ${iteration} Complete`, `Code improved and optimized`);
+                
+            } catch (error) {
+                throw new Error(`Iteration ${iteration} failed: ${error.message}`);
             }
         }
         
-        // Language switching for code editor
-        function switchLanguage(lang) {
-            console.log('Switching language to:', lang);
+        // Generate iteration-specific prompts
+        function generateIterationPrompt(iteration, description) {
+            const basePrompt = `Create a ${description}. Please provide complete HTML, CSS, and JavaScript code.`;
             
-            if (!editor) {
-                console.error('Editor not initialized');
-                return;
+            switch(iteration) {
+                case 1:
+                    return `${basePrompt} Focus on basic structure and functionality. Make it work first.`;
+                case 2:
+                    return `Improve the previous code: ${getCurrentCode()}. Add better styling and responsive design.`;
+                case 3:
+                    return `Enhance the code further: ${getCurrentCode()}. Add animations, better UX, and optimize performance.`;
+                case 4:
+                    return `Polish the code: ${getCurrentCode()}. Add error handling, accessibility features, and code optimization.`;
+                case 5:
+                    return `Final optimization: ${getCurrentCode()}. Make it production-ready with best practices and documentation.`;
+                default:
+                    return `Continue improving: ${getCurrentCode()}. Add more features and optimizations.`;
             }
-            
-            // Save current content
-            currentProject[currentLanguage] = editor.getValue();
-            
-            // Switch language
-            currentLanguage = lang;
-            const languageMap = { html: 'html', css: 'css', js: 'javascript' };
-            
-            monaco.editor.setModelLanguage(editor.getModel(), languageMap[lang]);
-            editor.setValue(currentProject[lang]);
-            
-            // Update button states
-            const languages = ['html', 'css', 'js'];
-            languages.forEach(language => {
-                const button = document.getElementById(`${language}Btn`);
-                if (button) {
-                    if (language === lang) {
-                        button.className = 'lang-active px-4 py-2 rounded-lg font-medium transition-all duration-300';
-                    } else {
-                        button.className = 'lang-inactive px-4 py-2 rounded-lg font-medium transition-all duration-300';
-                    }
-                }
+        }
+        
+        function getIterationGoal(iteration) {
+            const goals = {
+                1: 'Building core functionality and structure',
+                2: 'Adding styling and responsive design',
+                3: 'Implementing animations and UX improvements',
+                4: 'Adding error handling and accessibility',
+                5: 'Final optimization and polish'
+            };
+            return goals[iteration] || 'Continuing improvements';
+        }
+        
+        // OpenAI API Call
+        async function callOpenAI(prompt) {
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: 'gpt-4',
+                    messages: [
+                        {
+                            role: 'system',
+                            content: 'You are a expert web developer. Always provide complete, working HTML, CSS, and JavaScript code. Separate each section clearly with comments.'
+                        },
+                        {
+                            role: 'user',
+                            content: prompt
+                        }
+                    ],
+                    max_tokens: 4000,
+                    temperature: 0.7
+                })
             });
             
-            // Layout editor
-            setTimeout(() => {
-                if (editor) {
-                    editor.layout();
-                }
-            }, 100);
+            if (!response.ok) {
+                throw new Error(`OpenAI API error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            return data.choices[0].message.content;
         }
         
-        // Update preview with direct DOM manipulation
-        function updatePreview() {
-            console.log('Updating preview...');
+        // Process API Response
+        function processIterationResponse(response, iteration) {
+            // Extract HTML, CSS, and JavaScript from response
+            const htmlMatch = response.match(/```html\n([\s\S]*?)\n```/);
+            const cssMatch = response.match(/```css\n([\s\S]*?)\n```/);
+            const jsMatch = response.match(/```javascript\n([\s\S]*?)\n```/);
             
-            const previewDiv = document.getElementById('livePreview');
-            if (!previewDiv) {
-                console.error('Preview div not found');
-                return;
+            if (htmlMatch) {
+                currentProject.html = htmlMatch[1];
             }
+            if (cssMatch) {
+                currentProject.css = cssMatch[1];
+            }
+            if (jsMatch) {
+                currentProject.js = jsMatch[1];
+            }
+            
+            // Update code display
+            updateCodeDisplay();
+        }
+        
+        // UI Update Functions
+        function updateCodeDisplay() {
+            const codeResult = document.getElementById('codeResult');
+            const fullCode = `<!-- HTML -->\n${currentProject.html}\n\n/* CSS */\n${currentProject.css}\n\n// JavaScript\n${currentProject.js}`;
+            codeResult.innerHTML = `<pre><code>${escapeHtml(fullCode)}</code></pre>`;
+        }
+        
+        function updatePreview() {
+            const previewDiv = document.getElementById('livePreview');
             
             // Clear previous content
             previewDiv.innerHTML = '';
             
-            // Clean the HTML by removing document structure tags
-            const cleanedHTML = currentProject.html
-                .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
-                .replace(/<!DOCTYPE html>|<html.*?>|<\/html>|<head.*?>|<\/head>|<body.*?>|<\/body>/gi, '');
+            // Create preview content
+            const previewContent = document.createElement('div');
+            previewContent.innerHTML = currentProject.html;
             
-            // Insert HTML directly into the preview div
-            previewDiv.innerHTML = cleanedHTML;
-            
-            // Apply CSS styles dynamically
-            applyCSSStyles();
-            
-            // Execute JavaScript safely
-            executeJavaScript();
-        }
-        
-        // Apply CSS styles dynamically
-        function applyCSSStyles() {
-            // Remove existing preview styles
-            const existingStyle = document.getElementById('previewStyles');
-            if (existingStyle) {
-                existingStyle.remove();
+            // Add CSS
+            if (currentProject.css) {
+                const style = document.createElement('style');
+                style.textContent = currentProject.css;
+                previewContent.appendChild(style);
             }
             
-            // Create new style element
-            const styleElement = document.createElement('style');
-            styleElement.id = 'previewStyles';
+            previewDiv.appendChild(previewContent);
             
-            // Scope CSS to preview div to avoid conflicts
-            const scopedCSS = currentProject.css
-                .split('}')
-                .map(rule => {
-                    if (rule.trim() && !rule.includes('@') && !rule.includes('body') && !rule.includes('html')) {
-                        return `#livePreview ${rule}}`;
-                    }
-                    return rule + (rule.trim() ? '}' : '');
-                })
-                .join('');
-            
-            styleElement.textContent = scopedCSS;
-            document.head.appendChild(styleElement);
-        }
-        
-        // Execute JavaScript safely
-        function executeJavaScript() {
-            try {
-                // Create a safe execution context
-                const executeInContext = new Function('document', 'window', 'console', currentProject.js);
-                
-                // Execute with limited scope
-                executeInContext(
-                    document.getElementById('livePreview'),
-                    {},
-                    console
-                );
-            } catch (error) {
-                console.error('JavaScript execution error:', error);
-                
-                // Display error in preview
-                const previewDiv = document.getElementById('livePreview');
-                if (previewDiv) {
-                    const errorDiv = document.createElement('div');
-                    errorDiv.style.cssText = 'color: red; background: #ffe6e6; padding: 10px; border: 1px solid red; margin: 10px 0; border-radius: 4px;';
-                    errorDiv.innerHTML = `<strong>JavaScript Error:</strong> ${error.message}`;
-                    previewDiv.appendChild(errorDiv);
+            // Execute JavaScript
+            if (currentProject.js) {
+                try {
+                    const script = document.createElement('script');
+                    script.textContent = currentProject.js;
+                    previewContent.appendChild(script);
+                } catch (error) {
+                    console.error('Preview JS error:', error);
                 }
             }
         }
         
-        // Project management functions
-        function newProject() {
-            console.log('Creating new project...');
+        function addThinkingStep(title, description) {
+            const thinkingProcess = document.getElementById('thinkingProcess');
             
-            currentProject = {
-                id: null,
-                name: 'Untitled Project',
-                html: '<!DOCTYPE html>\n<html>\n<head>\n    <title>My Project</title>\n</head>\n<body>\n    <h1>Hello World!</h1>\n</body>\n</html>',
-                css: 'body {\n    font-family: Arial, sans-serif;\n    margin: 0;\n    padding: 20px;\n    background-color: #f0f0f0;\n}\n\nh1 {\n    color: #333;\n    text-align: center;\n}',
-                js: '// Your JavaScript code here\nconsole.log("Hello World!");'
-            };
-            
-            if (editor) {
-                editor.setValue(currentProject[currentLanguage]);
+            // Clear placeholder if first item
+            if (thinkingProcess.children.length === 1 && thinkingProcess.children[0].classList.contains('text-center')) {
+                thinkingProcess.innerHTML = '';
             }
             
-            updatePreview();
-            clearThinking();
-            
-            const promptInput = document.getElementById('promptInput');
-            if (promptInput) {
-                promptInput.value = '';
-            }
-            
-            showToast('New project created!', 'success');
-        }
-        
-        function showSaveModal() {
-            const modal = document.getElementById('projectNameModal');
-            const input = document.getElementById('projectNameInput');
-            
-            if (modal && input) {
-                input.value = currentProject.name;
-                modal.classList.remove('hidden');
-                input.focus();
-            }
-        }
-        
-        function hideSaveModal() {
-            const modal = document.getElementById('projectNameModal');
-            if (modal) {
-                modal.classList.add('hidden');
-            }
-        }
-        
-        function confirmSaveProject() {
-            const projectNameInput = document.getElementById('projectNameInput');
-            const projectName = projectNameInput.value.trim();
-            
-            if (!projectName) {
-                showToast('Please enter a project name', 'error');
-                return;
-            }
-            
-            currentProject.name = projectName;
-            currentProject.id = currentProject.id || Date.now().toString();
-            
-            const projects = JSON.parse(localStorage.getItem('aiCodeProjects') || '[]');
-            const existingIndex = projects.findIndex(p => p.id === currentProject.id);
-            
-            if (existingIndex >= 0) {
-                projects[existingIndex] = { ...currentProject };
-            } else {
-                projects.push({ ...currentProject });
-            }
-            
-            localStorage.setItem('aiCodeProjects', JSON.stringify(projects));
-            loadProjects();
-            hideSaveModal();
-            
-            showToast('Project saved successfully!', 'success');
-        }
-        
-        function loadProjects() {
-            console.log('Loading projects...');
-            
-            const projects = JSON.parse(localStorage.getItem('aiCodeProjects') || '[]');
-            const projectsList = document.getElementById('projectsList');
-            
-            if (!projectsList) {
-                console.error('Projects list element not found');
-                return;
-            }
-            
-            projectsList.innerHTML = '';
-            
-            if (projects.length === 0) {
-                projectsList.innerHTML = '<p class="text-gray-500 text-sm text-center py-4">No saved projects</p>';
-                return;
-            }
-            
-            projects.forEach(project => {
-                const projectElement = document.createElement('div');
-                projectElement.className = 'project-item p-3 rounded-lg cursor-pointer';
-                projectElement.innerHTML = `
-                    <div class="flex items-center justify-between">
-                        <div class="flex-1">
-                            <h3 class="text-white font-medium text-sm truncate">${project.name}</h3>
-                            <p class="text-gray-400 text-xs mt-1">Modified ${new Date(parseInt(project.id)).toLocaleDateString()}</p>
-                        </div>
-                        <div class="flex space-x-1 ml-2">
-                            <button onclick="loadProject('${project.id}')" class="text-blue-400 hover:text-blue-300 p-1 rounded" title="Load Project">
-                                <i class="fas fa-folder-open text-xs"></i>
-                            </button>
-                            <button onclick="deleteProject('${project.id}')" class="text-red-400 hover:text-red-300 p-1 rounded" title="Delete Project">
-                                <i class="fas fa-trash text-xs"></i>
-                            </button>
-                        </div>
+            const step = document.createElement('div');
+            step.className = 'thinking-bubble p-4 rounded-lg fade-in';
+            step.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="loading-spinner mt-1"></div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-white">${title}</h3>
+                        <p class="text-gray-300 text-sm mt-1">${description}</p>
+                        <div class="text-xs text-gray-500 mt-2">${new Date().toLocaleTimeString()}</div>
                     </div>
-                `;
-                projectsList.appendChild(projectElement);
+                </div>
+            `;
+            
+            thinkingProcess.appendChild(step);
+            thinkingProcess.scrollTop = thinkingProcess.scrollHeight;
+        }
+        
+        function addTimelineItem(title, description) {
+            const timeline = document.getElementById('iterationTimeline');
+            
+            // Clear placeholder if first item
+            if (timeline.children.length === 1 && timeline.children[0].classList.contains('text-center')) {
+                timeline.innerHTML = '<div class="timeline-line"></div>';
+            }
+            
+            const item = document.createElement('div');
+            item.className = 'relative pl-4 pb-4 fade-in';
+            item.innerHTML = `
+                <div class="timeline-dot"></div>
+                <div class="iteration-badge inline-block mb-2">${title}</div>
+                <p class="text-sm text-gray-300">${description}</p>
+                <div class="text-xs text-gray-500 mt-1">${new Date().toLocaleTimeString()}</div>
+            `;
+            
+            timeline.appendChild(item);
+            timeline.scrollTop = timeline.scrollHeight;
+        }
+        
+        function updateProgress() {
+            const progress = (iterationCount / maxIterations) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('currentIteration').textContent = `${iterationCount}/${maxIterations}`;
+        }
+        
+        function showProgress() {
+            document.getElementById('progressContainer').classList.remove('hidden');
+        }
+        
+        function hideProgress() {
+            document.getElementById('progressContainer').classList.add('hidden');
+        }
+        
+        function updateStats() {
+            const processingTime = Math.round((Date.now() - startTime) / 1000);
+            const codeLines = (currentProject.html + currentProject.css + currentProject.js).split('\n').length;
+            
+            document.getElementById('totalIterations').textContent = iterationCount;
+            document.getElementById('codeLines').textContent = codeLines;
+            document.getElementById('processingTime').textContent = `${processingTime}s`;
+            document.getElementById('improvements').textContent = iterationCount - 1;
+        }
+        
+        function resetUI() {
+            document.getElementById('thinkingProcess').innerHTML = '<div class="text-center text-gray-500 py-8"><i class="fas fa-lightbulb text-4xl mb-4"></i><p>AI thinking process will appear here...</p></div>';
+            document.getElementById('iterationTimeline').innerHTML = '<div class="text-center text-gray-500 py-4"><i class="fas fa-clock text-2xl mb-2"></i><p class="text-sm">Timeline will appear here...</p></div>';
+            document.getElementById('codeResult').innerHTML = '<div class="text-center text-gray-500 py-8"><i class="fas fa-file-code text-4xl mb-4"></i><p>Generated code will appear here...</p></div>';
+            document.getElementById('livePreview').innerHTML = '<div class="text-center text-gray-500 py-8"><i class="fas fa-desktop text-4xl mb-4"></i><p>Live preview will appear here...</p></div>';
+        }
+        
+        // Utility Functions
+        function getCurrentCode() {
+            return `HTML:\n${currentProject.html}\n\nCSS:\n${currentProject.css}\n\nJavaScript:\n${currentProject.js}`;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function copyCode() {
+            const code = getCurrentCode();
+            navigator.clipboard.writeText(code).then(() => {
+                showToast('Code copied to clipboard!', 'success');
+            }).catch(() => {
+                showToast('Failed to copy code', 'error');
             });
         }
         
-        function loadProject(projectId) {
-            console.log('Loading project:', projectId);
-            
-            const projects = JSON.parse(localStorage.getItem('aiCodeProjects') || '[]');
-            const project = projects.find(p => p.id === projectId);
-            
-            if (project) {
-                currentProject = { ...project };
-                
-                if (editor) {
-                    editor.setValue(currentProject[currentLanguage]);
-                }
-                
-                updatePreview();
-                showToast('Project loaded successfully!', 'success');
-            } else {
-                showToast('Project not found!', 'error');
-            }
-        }
-        
-        function deleteProject(projectId) {
-            console.log('Deleting project:', projectId);
-            
-            if (confirm('Are you sure you want to delete this project?')) {
-                const projects = JSON.parse(localStorage.getItem('aiCodeProjects') || '[]');
-                const filteredProjects = projects.filter(p => p.id !== projectId);
-                localStorage.setItem('aiCodeProjects', JSON.stringify(filteredProjects));
-                loadProjects();
-                showToast('Project deleted successfully!', 'success');
-            }
-        }
-        
-        function exportProject() {
-            console.log('Exporting project...');
-            
-            const dataStr = JSON.stringify(currentProject, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            const url = URL.createObjectURL(dataBlob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `${currentProject.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.json`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        function downloadCode() {
+            const code = getCurrentCode();
+            const blob = new Blob([code], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'generated-code.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
-            showToast('Project exported successfully!', 'success');
         }
         
-        // AI Code Generation
-        async function generateCode() {
-            console.log('Generating code...');
-            
-            const promptInput = document.getElementById('promptInput');
-            const prompt = promptInput.value.trim();
-            
-            if (!prompt) {
-                showToast('Please enter a prompt', 'error');
-                return;
-            }
-            
-            const apiKey = localStorage.getItem('openai_api_key');
-            if (!apiKey) {
-                showToast('Please configure your OpenAI API key first', 'error');
-                return;
-            }
-            
-            if (isGenerating) {
-                showToast('Please wait for the current generation to complete', 'error');
-                return;
-            }
-            
-            const aiModel = document.getElementById('aiModel').value;
-            const generateBtn = document.getElementById('generateBtn');
-            const originalHTML = generateBtn.innerHTML;
-            
-            try {
-                isGenerating = true;
-                generateBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Generating...';
-                generateBtn.disabled = true;
-                
-                // Switch to thinking tab and show AI thinking
-                switchTab('thinking');
-                updateThinking('🤔 Analyzing your request...\n\nPrompt: "' + prompt + '"\n\nLet me think about how to implement this...');
-                
-                // Call OpenAI API
-                const response = await callOpenAIAPI(prompt, aiModel, 'generate');
-                
-                if (response.success) {
-                    updateThinking(response.thinking);
-                    
-                    // Update code
-                    if (response.code.html) currentProject.html = response.code.html;
-                    if (response.code.css) currentProject.css = response.code.css;
-                    if (response.code.js) currentProject.js = response.code.js;
-                    
-                    // Update editor if in code tab
-                    if (editor) {
-                        editor.setValue(currentProject[currentLanguage]);
-                    }
-                    
-                    updatePreview();
-                    promptInput.value = '';
-                    showToast('Code generated successfully!', 'success');
-                } else {
-                    throw new Error(response.error);
-                }
-                
-            } catch (error) {
-                console.error('Error generating code:', error);
-                updateThinking('❌ Error: ' + error.message);
-                showToast('Error generating code: ' + error.message, 'error');
-            } finally {
-                generateBtn.innerHTML = originalHTML;
-                generateBtn.disabled = false;
-                isGenerating = false;
-            }
-        }
-        
-        async function updateCode() {
-            console.log('Updating code...');
-            
-            const promptInput = document.getElementById('promptInput');
-            const prompt = promptInput.value.trim();
-            
-            if (!prompt) {
-                showToast('Please enter a prompt', 'error');
-                return;
-            }
-            
-            const apiKey = localStorage.getItem('openai_api_key');
-            if (!apiKey) {
-                showToast('Please configure your OpenAI API key first', 'error');
-                return;
-            }
-            
-            if (isGenerating) {
-                showToast('Please wait for the current generation to complete', 'error');
-                return;
-            }
-            
-            const aiModel = document.getElementById('aiModel').value;
-            const updateBtn = document.getElementById('updateBtn');
-            const originalHTML = updateBtn.innerHTML;
-            
-            try {
-                isGenerating = true;
-                updateBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Updating...';
-                updateBtn.disabled = true;
-                
-                switchTab('thinking');
-                updateThinking('🔄 Analyzing current code and your update request...\n\nUpdate: "' + prompt + '"\n\nLet me modify the existing code...');
-                
-                const response = await callOpenAIAPI(prompt, aiModel, 'update');
-                
-                if (response.success) {
-                    updateThinking(response.thinking);
-                    
-                    // Update code
-                    if (response.code.html) currentProject.html = response.code.html;
-                    if (response.code.css) currentProject.css = response.code.css;
-                    if (response.code.js) currentProject.js = response.code.js;
-                    
-                    if (editor) {
-                        editor.setValue(currentProject[currentLanguage]);
-                    }
-                    
-                    updatePreview();
-                    promptInput.value = '';
-                    showToast('Code updated successfully!', 'success');
-                } else {
-                    throw new Error(response.error);
-                }
-                
-            } catch (error) {
-                console.error('Error updating code:', error);
-                updateThinking('❌ Error: ' + error.message);
-                showToast('Error updating code: ' + error.message, 'error');
-            } finally {
-                updateBtn.innerHTML = originalHTML;
-                updateBtn.disabled = false;
-                isGenerating = false;
-            }
-        }
-        
-        // Call OpenAI API
-        async function callOpenAIAPI(prompt, model, type) {
-            const apiKey = localStorage.getItem('openai_api_key');
-            
-            const systemPrompt = `You are an expert web developer. ${type === 'generate' ? 'Generate' : 'Update'} HTML, CSS, and JavaScript code based on the user's request. 
-
-Current project code:
-HTML: ${currentProject.html}
-CSS: ${currentProject.css}
-JavaScript: ${currentProject.js}
-
-Respond with a JSON object containing:
-1. thinking: Your thought process and explanation
-2. code: An object with html, css, and js properties
-
-Make sure the code is functional and follows best practices. For HTML, provide complete elements. For CSS, provide styles that work well. For JavaScript, provide working interactive code.`;
-            
-            try {
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey}`
-                    },
-                    body: JSON.stringify({
-                        model: model,
-                        messages: [
-                            { role: 'system', content: systemPrompt },
-                            { role: 'user', content: prompt }
-                        ],
-                        max_tokens: 2000,
-                        temperature: 0.7
-                    })
-                });
-                
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error?.message || 'API request failed');
-                }
-                
-                const data = await response.json();
-                const content = data.choices[0].message.content;
-                
-                try {
-                    const jsonResponse = JSON.parse(content);
-                    return { success: true, ...jsonResponse };
-                } catch (parseError) {
-                    // If JSON parsing fails, create a structured response
-                    return {
-                        success: true,
-                        thinking: `✨ Using ${model.toUpperCase()} to ${type} code...\n\nI understand you want to: "${prompt}"\n\nThe code has been ${type}d according to your requirements.`,
-                        code: {
-                            html: type === 'generate' ? generateSampleHTML(prompt) : currentProject.html,
-                            css: type === 'generate' ? generateSampleCSS(prompt) : currentProject.css,
-                            js: type === 'generate' ? generateSampleJS(prompt) : currentProject.js
-                        }
-                    };
-                }
-                
-            } catch (error) {
-                console.error('API call failed:', error);
-                return { success: false, error: error.message };
-            }
-        }
-        
-        // Generate sample code based on prompt
-        function generateSampleHTML(prompt) {
-            if (prompt.toLowerCase().includes('login') || prompt.toLowerCase().includes('form')) {
-                return `<div class="login-container">
-    <div class="login-form">
-        <h2>Login</h2>
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" class="login-btn">Login</button>
-        </form>
-    </div>
-</div>`;
-            } else if (prompt.toLowerCase().includes('button')) {
-                return `<div class="button-container">
-    <button id="myButton" class="styled-button">Click Me!</button>
-    <p id="message"></p>
-</div>`;
-            } else {
-                return `<div class="container">
-    <h1>Generated Content</h1>
-    <p>Based on your request: "${prompt}"</p>
-    <button onclick="showAlert()">Interactive Button</button>
-</div>`;
-            }
-        }
-        
-        function generateSampleCSS(prompt) {
-            if (prompt.toLowerCase().includes('login') || prompt.toLowerCase().includes('form')) {
-                return `body {
-    font-family: 'Inter', Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.login-container {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-    padding: 40px;
-    width: 100%;
-    max-width: 400px;
-}
-
-.login-form h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 30px;
-    font-weight: 600;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
-    font-weight: 500;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #e1e1e1;
-    border-radius: 6px;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
-}
-
-.form-group input:focus {
-    outline: none;
-    border-color: #667eea;
-}
-
-.login-btn {
-    width: 100%;
-    padding: 12px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.login-btn:hover {
-    transform: translateY(-2px);
-}`;
-            } else {
-                return `body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background: #f0f0f0;
-}
-
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: white;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-h1 {
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.styled-button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.styled-button:hover {
-    transform: translateY(-2px);
-}
-
-.button-container {
-    text-align: center;
-    margin: 20px 0;
-}`;
-            }
-        }
-        
-        function generateSampleJS(prompt) {
-            if (prompt.toLowerCase().includes('login') || prompt.toLowerCase().includes('form')) {
-                return `document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    
-    if (email && password) {
-        alert('Login successful! Welcome, ' + email);
-    } else {
-        alert('Please fill in all fields.');
-    }
-});
-
-// Add some interactive effects
-document.querySelectorAll('input').forEach(input => {
-    input.addEventListener('focus', function() {
-        this.style.transform = 'scale(1.02)';
-    });
-    
-    input.addEventListener('blur', function() {
-        this.style.transform = 'scale(1)';
-    });
-});`;
-            } else if (prompt.toLowerCase().includes('button')) {
-                return `document.getElementById('myButton').addEventListener('click', function() {
-    const message = document.getElementById('message');
-    message.textContent = 'Button clicked! ' + new Date().toLocaleTimeString();
-    
-    // Add some animation
-    this.style.transform = 'scale(0.95)';
-    setTimeout(() => {
-        this.style.transform = 'scale(1)';
-    }, 150);
-});`;
-            } else {
-                return `function showAlert() {
-    alert('Hello! This is generated based on: "${prompt}"');
-}
-
-// Add some interactive functionality
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Page loaded and ready!');
-    
-    // Add click effects to buttons
-    document.querySelectorAll('button').forEach(button => {
-        button.addEventListener('click', function() {
-            this.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                this.style.transform = 'scale(1)';
-            }, 150);
-        });
-    });
-});`;
-            }
-        }
-        
-        // Utility functions
-        function updateThinking(text) {
-            const thinkingText = document.getElementById('thinkingText');
-            if (thinkingText) {
-                thinkingText.innerHTML = `<div class="fade-in">${text.replace(/\n/g, '<br>')}</div>`;
-            }
-        }
-        
-        function clearThinking() {
-            const thinkingText = document.getElementById('thinkingText');
-            if (thinkingText) {
-                thinkingText.innerHTML = `
-                    <div class="text-center text-gray-500 mt-20">
-                        <i class="fas fa-lightbulb text-4xl mb-4"></i>
-                        <p class="text-lg">AI thoughts and explanations will appear here...</p>
-                        <p class="text-sm mt-2">Enter a prompt below to get started!</p>
-                    </div>
-                `;
-            }
-        }
-        
-        function showToast(message, type = 'success') {
-            console.log('Toast:', message, type);
-            
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check' : 'exclamation-triangle'} mr-2"></i>
-                ${message}
-            `;
             
-            document.body.appendChild(toast);
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                warning: 'bg-yellow-500',
+                info: 'bg-blue-500'
+            };
+            
+            toast.className = `${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg fade-in`;
+            toast.textContent = message;
+            
+            toastContainer.appendChild(toast);
             
             setTimeout(() => {
                 toast.remove();
-            }, 4000);
+            }, 3000);
         }
-        
-        // Make functions global for onclick handlers
-        window.loadProject = loadProject;
-        window.deleteProject = deleteProject;
-        
-        // Error handling for uncaught errors
-        window.addEventListener('error', function(e) {
-            console.error('Uncaught error:', e.error);
-            showToast('An error occurred. Please check the console for details.', 'error');
-        });
-        
-        // Handle unhandled promise rejections
-        window.addEventListener('unhandledrejection', function(e) {
-            console.error('Unhandled promise rejection:', e.reason);
-            showToast('An error occurred during API call. Please try again.', 'error');
-        });
     </script>
 </body>
 </html>
